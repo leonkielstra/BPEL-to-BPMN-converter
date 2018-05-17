@@ -1,4 +1,5 @@
 package models.bpel;
 
-public class BPEL {
+public class Process {
+
 }
