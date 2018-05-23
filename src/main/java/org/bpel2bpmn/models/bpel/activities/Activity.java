@@ -1,42 +1,36 @@
 package org.bpel2bpmn.models.bpel.activities;
 
-public abstract class Activity {
+import org.bpel2bpmn.models.bpel.BPELObject;
 
-    /* The standard attributes of an activity */
-    private String name;
-    private boolean suppressJoinFailure;
+public abstract class Activity extends BPELObject {
+
+    /**
+     * Basic activities
+     */
+    public static final String ASSIGN = "assign";
+    public static final String EMPTY = "empty";
+    public static final String EXIT = "exit";
+    public static final String INVOKE = "invoke";
+    public static final String RECEIVE = "receive";
+    public static final String REPLY = "reply";
+    public static final String RETHROW = "rethrow";
+    public static final String THROW = "throw";
+    public static final String WAIT = "wait";
+
+    /**
+     * Structured activities
+     */
+    public static final String FLOW = "flow";
+    public static final String FOREACH = "forEach";
+    public static final String IF = "if";
+    public static final String PICK = "pick";
+    public static final String REPEATUNTIL = "repeatUntil";
+    public static final String SEQUENCE = "sequence";
+    public static final String WHILE = "while";
+
 
     /* The standard elements for an activity */
     // TODO: Implement standard elements.
 
-    public Activity(String name) {
-        this(name, false);
-    }
-
-    public Activity(String name, boolean suppressJoinFailure) {
-        this.name = name;
-        this.suppressJoinFailure = suppressJoinFailure;
-    }
-
     public abstract Object toBPMN(); // TODO: replace Object by a class from the bpmn model.
-
-    /*
-     * Getters & Setters
-     */
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean shouldSuppressJoinFailure() {
-        return suppressJoinFailure;
-    }
-
-    public void setSuppressJoinFailure(boolean suppressJoinFailure) {
-        this.suppressJoinFailure = suppressJoinFailure;
-    }
 }
