@@ -35,11 +35,22 @@ public class BPMNBuilder {
         return executableProcess;
     }
 
-    public <T extends BpmnModelElementInstance> T createElement(String id, Class<T> elementClass) {
-        return createElement(currentScope, id, elementClass);
+    public <T extends BpmnModelElementInstance> T createElement(Class<T> elementClass) {
+        return createElement(currentScope, elementClass);
     }
 
-    public <T extends BpmnModelElementInstance> T createElement(BpmnModelElementInstance parentElement, String id, Class<T> elementClass) {
+    public <T extends BpmnModelElementInstance> T createElement(BpmnModelElementInstance parentElement, Class<T> elementClass) {
+        T element = modelInstance.newInstance(elementClass);
+        parentElement.addChildElement(element);
+
+        return element;
+    }
+
+    public <T extends BpmnModelElementInstance> T createElementWithId(String id, Class<T> elementClass) {
+        return createElementWithId(currentScope, id, elementClass);
+    }
+
+    public <T extends BpmnModelElementInstance> T createElementWithId(BpmnModelElementInstance parentElement, String id, Class<T> elementClass) {
         T element = modelInstance.newInstance(elementClass);
         element.setAttributeValue("id", id, true);
         parentElement.addChildElement(element);
@@ -52,7 +63,7 @@ public class BPMNBuilder {
     }
 
     public SequenceFlow createSequenceFlow(BpmnModelElementInstance parentElement, FlowNode from, FlowNode to) {
-        SequenceFlow sequenceFlow = createElement(parentElement, from.getId() + "-" + to.getId(), SequenceFlow.class);
+        SequenceFlow sequenceFlow = createElementWithId(parentElement, from.getId() + "-" + to.getId(), SequenceFlow.class);
         parentElement.addChildElement(sequenceFlow);
         sequenceFlow.setSource(from);
         from.getOutgoing().add(sequenceFlow);
@@ -60,10 +71,6 @@ public class BPMNBuilder {
         to.getIncoming().add(sequenceFlow);
 
         return sequenceFlow;
-    }
-
-    public void add(BpmnModelElementInstance element) {
-        currentScope.addChildElement(element);
     }
 
     /*
