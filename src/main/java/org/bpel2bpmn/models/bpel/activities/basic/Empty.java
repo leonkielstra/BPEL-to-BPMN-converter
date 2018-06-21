@@ -10,8 +10,12 @@ public class Empty extends Activity {
         super();
     }
 
+    /**
+     * This activity is skipped in the mapping.
+     * @return previous activity (such that it can be mapped to the next activity).
+     */
     @Override
     public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) {
-        return null;
+        return from;
     }
 }

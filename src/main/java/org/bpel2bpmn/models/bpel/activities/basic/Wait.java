@@ -2,18 +2,33 @@ package org.bpel2bpmn.models.bpel.activities.basic;
 
 import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
-import org.camunda.bpm.model.bpmn.instance.FlowNode;
+import org.camunda.bpm.model.bpmn.instance.*;
 
 public class Wait extends Activity {
 
     private boolean isTimer; /* true in case of a <for> construct, false in case of a <until> construct. */
     private String timeExpression; /* Represents either the duration or deadline expression */
 
-    public Wait(boolean isTimer, String timeExpression) {
+    public Wait() {
         super();
 
-        this.isTimer = isTimer;
-        this.timeExpression = timeExpression;
+        this.isTimer = false;
+    }
+
+    @Override
+    public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) {
+        IntermediateCatchEvent intermediateEvent = builder.createElement(IntermediateCatchEvent.class);
+        TimerEventDefinition timer = builder.createElement(intermediateEvent, TimerEventDefinition.class);
+
+        if (isTimer) {
+            TimeDuration timeDuration = builder.createElement(timer, TimeDuration.class);
+            timeDuration.setTextContent(timeExpression);
+        } else {
+            TimeDate timeDate = builder.createElement(timer, TimeDate.class);
+            timeDate.setTextContent(timeExpression);
+        }
+
+        return intermediateEvent;
     }
 
     /*
@@ -24,12 +39,15 @@ public class Wait extends Activity {
         return isTimer;
     }
 
+    public void setTimer(boolean timer) {
+        isTimer = timer;
+    }
+
     public String getTimeExpression() {
         return timeExpression;
     }
 
-    @Override
-    public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) {
-        return null;
+    public void setTimeExpression(String timeExpression) {
+        this.timeExpression = timeExpression;
     }
 }

@@ -3,15 +3,21 @@ package org.bpel2bpmn.models.bpel;
 import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
 import org.bpel2bpmn.utilities.validation.ValidationResult;
+import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl;
 import org.camunda.bpm.model.bpmn.instance.Definitions;
 import org.camunda.bpm.model.bpmn.instance.EndEvent;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
 public class Process extends BPELObject {
+
+    private static Logger LOG = LoggerFactory.getLogger(Process.class);
 
     public final String[] ATTRIBUTES = {
             "name",                 // mandatory
@@ -39,8 +45,8 @@ public class Process extends BPELObject {
     }
 
     @Override
-    public void addChild(BPELObject activity) {
-        this.children.add(activity);
+    public void addChild(BPELObject child) {
+        this.children.add(child);
     }
 
     public ValidationResult validate() {
@@ -63,18 +69,22 @@ public class Process extends BPELObject {
         Definitions definitions = builder.createDefinitions("bpel2bpmn", attributes.get("targetNamespace"));
         builder.createExecutableProcess(definitions, attributes.get("name"));
 
-        StartEvent start = builder.createElement("process_start", StartEvent.class);
+        StartEvent start = builder.createElementWithId("process_start", StartEvent.class);
 
         // Map and connect children.
         FlowNode lastElement = start;
         for (BPELObject child : children) {
+            // TODO: Implement non-activities.
             Activity activity = (Activity) child;
             lastElement = activity.toBPMN(builder, start);
         }
 
-        EndEvent end = builder.createElement("process_end", EndEvent.class);
-        builder.createSequenceFlow(lastElement, end);
+        if (lastElement.getClass() != EndEventImpl.class) {
+            EndEvent end = builder.createElementWithId("process_end", EndEvent.class);
+            builder.createSequenceFlow(lastElement, end);
+        }
 
+        Bpmn.validateModel(builder.getModelInstance());
         return builder.getModelInstance();
     }
 

@@ -3,9 +3,12 @@ package org.bpel2bpmn.utilities.parsers;
 import org.bpel2bpmn.models.bpel.BPELObject;
 import org.bpel2bpmn.models.bpel.Process;
 import org.bpel2bpmn.models.bpel.activities.Activity;
+import org.bpel2bpmn.models.bpel.activities.basic.Empty;
+import org.bpel2bpmn.models.bpel.activities.basic.Exit;
 import org.bpel2bpmn.models.bpel.activities.structured.Sequence;
-import org.bpel2bpmn.utilities.parsers.model.activities.ActivityParser;
 import org.bpel2bpmn.utilities.parsers.model.ProcessParser;
+import org.bpel2bpmn.utilities.parsers.model.activities.ActivityParser;
+import org.bpel2bpmn.utilities.parsers.model.activities.basic.WaitParser;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -42,6 +45,7 @@ public class BPELParser {
         LOG.debug("Parsing element: " + element.getName());
         BPELObject bpelObject;
 
+        boolean parseChildren = true;
         switch (element.getName().toLowerCase()) {
             case "process":
                 bpelObject = ProcessParser.parse(element);
@@ -49,19 +53,33 @@ public class BPELParser {
             case Activity.SEQUENCE:
                 bpelObject = ActivityParser.parse(element, Sequence.class);
                 break;
+            case Activity.EMPTY:
+                bpelObject = ActivityParser.parse(element, Empty.class);
+                break;
+            case Activity.EXIT:
+                bpelObject = ActivityParser.parse(element, Exit.class);
+                break;
+            case Activity.WAIT:
+                bpelObject = WaitParser.parse(element);
+                parseChildren = false;
+                break;
             default:
                 return null; // TODO: action if not recognized.
         }
 
+        if (parseChildren) { parseChildren(bpelObject, element); }
+
+        return bpelObject;
+    }
+
+    private static void parseChildren(BPELObject bpelObject, Element element) {
         for (Object child : element.getChildren()) {
             Element childElement = (Element) child;
             BPELObject parsedChild = parseElement(childElement);
-            if (parsedChild != null) {
+            if (bpelObject != null && parsedChild != null) {
                 bpelObject.addChild(parsedChild);
                 parsedChild.setParent(bpelObject);
             }
         }
-
-        return bpelObject;
     }
 }
