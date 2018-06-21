@@ -2,6 +2,9 @@ package org.bpel2bpmn.utilities.parsers;
 
 import org.bpel2bpmn.models.bpel.BPELObject;
 import org.bpel2bpmn.models.bpel.Process;
+import org.bpel2bpmn.models.bpel.activities.Activity;
+import org.bpel2bpmn.models.bpel.activities.structured.Sequence;
+import org.bpel2bpmn.utilities.parsers.model.activities.ActivityParser;
 import org.bpel2bpmn.utilities.parsers.model.ProcessParser;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -42,6 +45,9 @@ public class BPELParser {
         switch (element.getName().toLowerCase()) {
             case "process":
                 bpelObject = ProcessParser.parse(element);
+                break;
+            case Activity.SEQUENCE:
+                bpelObject = ActivityParser.parse(element, Sequence.class);
                 break;
             default:
                 return null; // TODO: action if not recognized.
