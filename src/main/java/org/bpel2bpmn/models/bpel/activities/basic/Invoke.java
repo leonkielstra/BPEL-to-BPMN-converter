@@ -1,16 +1,19 @@
 package org.bpel2bpmn.models.bpel.activities.basic;
 
 import org.bpel2bpmn.models.bpel.activities.Activity;
+import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
+import org.camunda.bpm.model.bpmn.instance.BpmnModelElementInstance;
+import org.camunda.bpm.model.bpmn.instance.FlowNode;
 
 // TODO: Implement; Maybe create a super class for all message events?
 public class Invoke extends Activity {
 
-    public Invoke(String name) {
-        super(name);
+    public Invoke() {
+        super();
     }
 
     @Override
-    public Object toBPMN() {
+    public FlowNode toBPMN(BPMNBuilder builder, BpmnModelElementInstance from) {
         return null;
     }
 }

@@ -1,6 +1,9 @@
 package org.bpel2bpmn.models.bpel.activities;
 
 import org.bpel2bpmn.models.bpel.BPELObject;
+import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
+import org.camunda.bpm.model.bpmn.instance.BpmnModelElementInstance;
+import org.camunda.bpm.model.bpmn.instance.FlowNode;
 
 public abstract class Activity extends BPELObject {
 
@@ -32,5 +35,10 @@ public abstract class Activity extends BPELObject {
     /* The standard elements for an activity */
     // TODO: Implement standard elements.
 
-    public abstract Object toBPMN(); // TODO: replace Object by a class from the bpmn model.
+    /**
+     * This method maps the BPEL object to a BPMN object.
+     * @param from the BPMN element to which the newly mapped element should be connected
+     * @return a BPMN element
+     */
+    public abstract FlowNode toBPMN(BPMNBuilder builder, BpmnModelElementInstance from);
 }

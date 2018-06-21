@@ -1,14 +1,17 @@
 package org.bpel2bpmn.models.bpel.activities.basic;
 
 import org.bpel2bpmn.models.bpel.activities.Activity;
+import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
+import org.camunda.bpm.model.bpmn.instance.BpmnModelElementInstance;
+import org.camunda.bpm.model.bpmn.instance.FlowNode;
 
 public class Wait extends Activity {
 
     private boolean isTimer; /* true in case of a <for> construct, false in case of a <until> construct. */
     private String timeExpression; /* Represents either the duration or deadline expression */
 
-    public Wait(String name, boolean isTimer, String timeExpression) {
-        super(name);
+    public Wait(boolean isTimer, String timeExpression) {
+        super();
 
         this.isTimer = isTimer;
         this.timeExpression = timeExpression;
@@ -27,7 +30,7 @@ public class Wait extends Activity {
     }
 
     @Override
-    public Object toBPMN() {
-        return null; // TODO
+    public FlowNode toBPMN(BPMNBuilder builder, BpmnModelElementInstance from) {
+        return null;
     }
 }

@@ -1,6 +1,9 @@
 package org.bpel2bpmn.models.bpel.activities.structured;
 
 import org.bpel2bpmn.models.bpel.activities.Activity;
+import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
+import org.camunda.bpm.model.bpmn.instance.BpmnModelElementInstance;
+import org.camunda.bpm.model.bpmn.instance.FlowNode;
 
 import java.util.ArrayList;
 
@@ -8,14 +11,14 @@ public class Sequence extends Activity {
 
     private ArrayList<Activity> activities;
 
-    public Sequence(String name) {
-        super(name);
+    public Sequence() {
+        super();
         this.activities = new ArrayList<>();
     }
 
     @Override
-    public Object toBPMN() {
-        return null; // TODO
+    public FlowNode toBPMN(BPMNBuilder builder, BpmnModelElementInstance from) {
+        return null;
     }
 
     public void addActivity(Activity activity) {

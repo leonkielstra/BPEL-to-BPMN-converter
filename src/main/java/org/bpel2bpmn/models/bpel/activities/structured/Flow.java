@@ -1,6 +1,9 @@
 package org.bpel2bpmn.models.bpel.activities.structured;
 
 import org.bpel2bpmn.models.bpel.activities.Activity;
+import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
+import org.camunda.bpm.model.bpmn.instance.BpmnModelElementInstance;
+import org.camunda.bpm.model.bpmn.instance.FlowNode;
 
 import java.util.ArrayList;
 
@@ -9,12 +12,12 @@ public class Flow extends Activity {
     // TODO: Implement Links
     private ArrayList<Activity> activities;
 
-    public Flow(String name) {
-        super(name);
+    public Flow() {
+        super();
     }
 
     @Override
-    public Object toBPMN() {
+    public FlowNode toBPMN(BPMNBuilder builder, BpmnModelElementInstance from) {
         return null;
     }
 

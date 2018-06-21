@@ -1,18 +1,21 @@
 package org.bpel2bpmn.models.bpel.activities.structured;
 
 import org.bpel2bpmn.models.bpel.activities.Activity;
+import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
+import org.camunda.bpm.model.bpmn.instance.BpmnModelElementInstance;
+import org.camunda.bpm.model.bpmn.instance.FlowNode;
 
 public class RepeatUntil extends Activity {
 
     private String condition;
     private String activity;
 
-    public RepeatUntil(String name) {
-        super(name);
+    public RepeatUntil() {
+        super();
     }
 
     @Override
-    public Object toBPMN() {
+    public FlowNode toBPMN(BPMNBuilder builder, BpmnModelElementInstance from) {
         return null;
     }
 
