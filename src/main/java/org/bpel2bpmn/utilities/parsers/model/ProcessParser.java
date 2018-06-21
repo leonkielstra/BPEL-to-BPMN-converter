@@ -1,45 +1,36 @@
 package org.bpel2bpmn.utilities.parsers.model;
 
-import org.bpel2bpmn.models.bpel.BPELObject;
 import org.bpel2bpmn.models.bpel.Process;
-import org.bpel2bpmn.utilities.parsers.BPELParser;
-import org.bpel2bpmn.utilities.parsers.RecursiveParser;
+import org.bpel2bpmn.utilities.validation.ValidationResult;
+import org.jdom.Attribute;
+import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.Attribute;
-import javax.xml.stream.events.StartElement;
-import javax.xml.stream.events.XMLEvent;
-import java.util.Iterator;
-
-public class ProcessParser extends RecursiveParser {
+public class ProcessParser {
 
     private static Logger LOG = LoggerFactory.getLogger(ProcessParser.class);
 
-    public static Process parse(XMLEventReader eventReader, StartElement startElement) {
+    public static Process parse(Element element) throws IllegalStateException {
         Process process = new Process();
+        parseAttributes(process, element);
 
-        parseAttributes(startElement, process);
+        return process;
+    }
 
-        try {
-            while (eventReader.hasNext()) {
-                XMLEvent nextEvent = eventReader.nextEvent();
-
-                if (nextEvent.isStartElement()) {
-                    BPELObject activity = BPELParser.parseStartElement(eventReader, nextEvent.asStartElement());
-                    process.addActivity(activity);
-                }
-
-                if (nextEvent.isEndElement()) {
-                    return process;
-                }
+    private static void parseAttributes(Process process, Element element) throws IllegalStateException {
+        for (String attributeName : process.ATTRIBUTES) {
+            Attribute attribute = element.getAttribute(attributeName);
+            if (attribute != null) {
+                process.addAttribute(attributeName, attribute.getValue());
             }
-        } catch (XMLStreamException e) {
-            LOG.error(e.getMessage());
         }
 
-        return null;
+        process.addAttribute("xmlns", element.getNamespace().getURI());
+
+        ValidationResult validationResult = process.validate();
+        if (!validationResult.isValid()) {
+            throw new IllegalStateException(validationResult.getMessage());
+        }
     }
 }

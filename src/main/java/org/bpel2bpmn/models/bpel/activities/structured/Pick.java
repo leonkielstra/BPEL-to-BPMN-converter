@@ -1,6 +1,9 @@
 package org.bpel2bpmn.models.bpel.activities.structured;
 
 import org.bpel2bpmn.models.bpel.activities.Activity;
+import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
+import org.camunda.bpm.model.bpmn.instance.BpmnModelElementInstance;
+import org.camunda.bpm.model.bpmn.instance.FlowNode;
 
 public class Pick extends Activity {
 
@@ -8,13 +11,13 @@ public class Pick extends Activity {
 
     // TODO: Implement onAlarm and onMessage
 
-    public Pick(String name, boolean createInstance) {
-        super(name);
+    public Pick(boolean createInstance) {
+        super();
         this.createInstance = createInstance;
     }
 
     @Override
-    public Object toBPMN() {
+    public FlowNode toBPMN(BPMNBuilder builder, BpmnModelElementInstance from) {
         return null;
     }
 
