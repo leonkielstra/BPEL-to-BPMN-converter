@@ -2,7 +2,6 @@ package org.bpel2bpmn.models.bpel.activities;
 
 import org.bpel2bpmn.models.bpel.BPELObject;
 import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
-import org.camunda.bpm.model.bpmn.instance.BpmnModelElementInstance;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 
 public abstract class Activity extends BPELObject {
@@ -31,14 +30,25 @@ public abstract class Activity extends BPELObject {
     public static final String SEQUENCE = "sequence";
     public static final String WHILE = "while";
 
+    /**
+     * Standard attributes
+     */
+    public final static String[] STANDARD_ATTRIBUTES = {
+            "name",
+            "suppressJoinFailure"
+    };
 
     /* The standard elements for an activity */
     // TODO: Implement standard elements.
+
+    public Activity() {
+        addAttribute("suppressJoinFailure", "no");
+    }
 
     /**
      * This method maps the BPEL object to a BPMN object.
      * @param from the BPMN element to which the newly mapped element should be connected
      * @return a BPMN element
      */
-    public abstract FlowNode toBPMN(BPMNBuilder builder, BpmnModelElementInstance from);
+    public abstract FlowNode toBPMN(BPMNBuilder builder, FlowNode from);
 }
