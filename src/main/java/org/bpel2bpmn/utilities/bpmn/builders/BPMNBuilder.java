@@ -11,6 +11,9 @@ public class BPMNBuilder {
     private Process executableProcess;
     private BpmnModelElementInstance currentScope;
 
+    private boolean conditionPending;
+    private String condition;
+
     public BPMNBuilder() {
         this.modelInstance = Bpmn.createEmptyModel();
     }
@@ -70,7 +73,20 @@ public class BPMNBuilder {
         sequenceFlow.setTarget(to);
         to.getIncoming().add(sequenceFlow);
 
+        if (conditionPending) {
+            ConditionExpression expression = modelInstance.newInstance(ConditionExpression.class);
+            expression.setTextContent(condition);
+            sequenceFlow.addChildElement(expression);
+            conditionPending = false;
+            condition = null;
+        }
+
         return sequenceFlow;
+    }
+
+    public void prepareConditionalSequenceFlow(String condition) {
+        conditionPending = true;
+        this.condition = condition;
     }
 
     /*
