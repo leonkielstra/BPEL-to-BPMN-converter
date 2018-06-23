@@ -66,7 +66,7 @@ public class Process extends BPELObject {
 
     public BpmnModelInstance toBPMN() {
         BPMNBuilder builder = new BPMNBuilder();
-        Definitions definitions = builder.createDefinitions("bpel2bpmn", attributes.get("targetNamespace"));
+        Definitions definitions = builder.createDefinitions("bpel2bpmn");
         builder.createExecutableProcess(definitions, attributes.get("name"));
 
         StartEvent start = builder.createElementWithId("process_start", StartEvent.class);
