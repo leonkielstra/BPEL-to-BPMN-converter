@@ -7,6 +7,8 @@ import org.camunda.bpm.model.bpmn.instance.Process;
 
 public class BPMNBuilder {
 
+    private static final String BPMN_NAMESPACE = "http://bpmn.io/schema/bpmn";
+
     private BpmnModelInstance modelInstance;
     private Process executableProcess;
     private BpmnModelElementInstance currentScope;
@@ -18,10 +20,10 @@ public class BPMNBuilder {
         this.modelInstance = Bpmn.createEmptyModel();
     }
 
-    public Definitions createDefinitions(String exporter, String targetNamespace) {
+    public Definitions createDefinitions(String exporter) {
         Definitions definitions = modelInstance.newInstance(Definitions.class);
         definitions.setExporter(exporter);
-        definitions.setTargetNamespace(targetNamespace);
+        definitions.setTargetNamespace(BPMN_NAMESPACE);
         modelInstance.setDefinitions(definitions);
 
         return definitions;
