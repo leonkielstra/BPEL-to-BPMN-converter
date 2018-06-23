@@ -9,6 +9,7 @@ import org.bpel2bpmn.models.bpel.activities.structured.Sequence;
 import org.bpel2bpmn.utilities.parsers.model.ProcessParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.ActivityParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.basic.WaitParser;
+import org.bpel2bpmn.utilities.parsers.model.activities.structured.IfParser;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -45,7 +46,7 @@ public class BPELParser {
         LOG.debug("Parsing element: " + element.getName());
         BPELObject bpelObject;
 
-        boolean parseChildren = true;
+        boolean parseChildren = true; // If false, children are parsed within element parser.
         switch (element.getName().toLowerCase()) {
             case "process":
                 bpelObject = ProcessParser.parse(element);
@@ -63,6 +64,10 @@ public class BPELParser {
                 bpelObject = WaitParser.parse(element);
                 parseChildren = false;
                 break;
+            case Activity.IF:
+                bpelObject = IfParser.parse(element);
+                parseChildren = false;
+                break;
             default:
                 return null; // TODO: action if not recognized.
         }
@@ -72,7 +77,7 @@ public class BPELParser {
         return bpelObject;
     }
 
-    private static void parseChildren(BPELObject bpelObject, Element element) {
+    public static void parseChildren(BPELObject bpelObject, Element element) {
         for (Object child : element.getChildren()) {
             Element childElement = (Element) child;
             BPELObject parsedChild = parseElement(childElement);
