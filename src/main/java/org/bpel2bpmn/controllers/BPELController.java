@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
 public class BPELController {
 
@@ -25,13 +27,19 @@ public class BPELController {
     @RequestMapping(value = BASE_URL + "/toBPMN",
                     method = RequestMethod.POST,
                     consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity convertToBPMN(@RequestParam("bpelFile") MultipartFile uploadFile) {
-        Process bpelProcess = BPELParser.parse(uploadFile);
+    public ResponseEntity convertToBPMN(@RequestParam("bpel") MultipartFile bpelFile, @RequestParam("wsdl") MultipartFile[] wsdlFiles) {
+        try {
+            Process bpelProcess = BPELParser.parse(bpelFile, wsdlFiles);
 
-        BpmnModelInstance bpmnProcess = bpelProcess.toBPMN();
-        String xml = Bpmn.convertToString(bpmnProcess);
+            BpmnModelInstance bpmnProcess = bpelProcess.toBPMN();
+            String xml = Bpmn.convertToString(bpmnProcess);
 
-        return ResponseEntity.status(HttpStatus.OK).body(xml);
+            return ResponseEntity.status(HttpStatus.OK).body(xml);
+        } catch (IOException e) {
+            LOG.error(e.getMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong when processing the files.");
     }
 
 }

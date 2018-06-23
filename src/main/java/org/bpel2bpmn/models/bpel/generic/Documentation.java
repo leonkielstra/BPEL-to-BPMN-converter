@@ -1,4 +1,4 @@
-package org.bpel2bpmn.models.bpel.extensions;
+package org.bpel2bpmn.models.bpel.generic;
 
 import org.bpel2bpmn.models.bpel.BPELObject;
 

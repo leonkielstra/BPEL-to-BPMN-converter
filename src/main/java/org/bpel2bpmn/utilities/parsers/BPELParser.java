@@ -20,26 +20,50 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 
 public class BPELParser {
 
     private static Logger LOG = LoggerFactory.getLogger(BPELParser.class);
 
-    public static Process parse(MultipartFile bpelFile) {
-
+    public static Process parse(MultipartFile bpelFile, MultipartFile[] wsdlFiles) throws IOException {
         SAXBuilder builder = new SAXBuilder();
-        InputStream inputStream = null;
+        InputStream inputStream;
+
+        // Parse WSDL files
+        HashMap<String, Document> wsdlDocuments = new HashMap<>();
+        Document wsdlDocument;
+        String targetNamespace;
+        for (MultipartFile wsdlFile : wsdlFiles) {
+            try {
+                inputStream = wsdlFile.getInputStream();
+                wsdlDocument = builder.build(inputStream);
+                targetNamespace = wsdlDocument.getRootElement().getAttributeValue("targetNamespace");
+                wsdlDocuments.put(targetNamespace, wsdlDocument);
+            } catch (IOException | JDOMException e) {
+                LOG.error("Could not parse this WSDL file:");
+                LOG.error(e.getMessage());
+            }
+        }
+
+        // Parse BPEL file
         try {
             inputStream = bpelFile.getInputStream();
             Document bpelXML = builder.build(inputStream);
 
             Element root = bpelXML.getRootElement();
-            return (Process) parseElement(root);
+            Process process = (Process) parseElement(root);
+            if (process != null) {
+                process.setWsdlDocuments(wsdlDocuments);
+            }
+
+            return process;
         } catch (IOException | JDOMException e) {
-            e.printStackTrace();
+            LOG.error("Could not parse this BPEL file:");
+            LOG.error(e.getMessage());
         }
 
-        return null;
+        throw new IOException("Could not parse the given files.");
     }
 
     private static BPELObject parseElement(Element element) {
