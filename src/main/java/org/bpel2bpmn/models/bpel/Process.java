@@ -10,10 +10,12 @@ import org.camunda.bpm.model.bpmn.instance.Definitions;
 import org.camunda.bpm.model.bpmn.instance.EndEvent;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
+import org.jdom.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Process extends BPELObject {
 
@@ -30,6 +32,7 @@ public class Process extends BPELObject {
     };
 
     private ArrayList<BPELObject> children;
+    private HashMap<String, Document> wsdlDocuments;
 
     public Process() {
         this.children = new ArrayList<>();
@@ -88,11 +91,23 @@ public class Process extends BPELObject {
         return builder.getModelInstance();
     }
 
+    public Document getWsdlFile(String namespace) {
+        return wsdlDocuments.get(namespace);
+    }
+
     /*
      * Getters & Setters
      */
 
     public ArrayList<BPELObject> getChildren() {
         return children;
+    }
+
+    public HashMap<String, Document> getWsdlDocuments() {
+        return wsdlDocuments;
+    }
+
+    public void setWsdlDocuments(HashMap<String, Document> wsdlDocuments) {
+        this.wsdlDocuments = wsdlDocuments;
     }
 }
