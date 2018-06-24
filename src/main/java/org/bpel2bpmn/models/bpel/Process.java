@@ -1,6 +1,7 @@
 package org.bpel2bpmn.models.bpel;
 
 import org.bpel2bpmn.models.bpel.activities.Activity;
+import org.bpel2bpmn.models.bpel.generic.PartnerLink;
 import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
 import org.bpel2bpmn.utilities.validation.ValidationResult;
 import org.camunda.bpm.model.bpmn.Bpmn;
@@ -10,7 +11,6 @@ import org.camunda.bpm.model.bpmn.instance.Definitions;
 import org.camunda.bpm.model.bpmn.instance.EndEvent;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
-import org.jdom.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +21,7 @@ public class Process extends BPELObject {
 
     private static Logger LOG = LoggerFactory.getLogger(Process.class);
 
-    public final String[] ATTRIBUTES = {
+    public static final String[] ATTRIBUTES = {
             "name",                 // mandatory
             "targetNamespace",      // optional
             "queryLanguage",        // optional
@@ -32,7 +32,7 @@ public class Process extends BPELObject {
     };
 
     private ArrayList<BPELObject> children;
-    private HashMap<String, Document> wsdlDocuments;
+    private HashMap<String, PartnerLink> partnerLinks;
 
     public Process() {
         this.children = new ArrayList<>();
@@ -91,10 +91,6 @@ public class Process extends BPELObject {
         return builder.getModelInstance();
     }
 
-    public Document getWsdlFile(String namespace) {
-        return wsdlDocuments.get(namespace);
-    }
-
     /*
      * Getters & Setters
      */
@@ -103,11 +99,11 @@ public class Process extends BPELObject {
         return children;
     }
 
-    public HashMap<String, Document> getWsdlDocuments() {
-        return wsdlDocuments;
+    public HashMap<String, PartnerLink> getPartnerLinks() {
+        return partnerLinks;
     }
 
-    public void setWsdlDocuments(HashMap<String, Document> wsdlDocuments) {
-        this.wsdlDocuments = wsdlDocuments;
+    public void setPartnerLinks(HashMap<String, PartnerLink> partnerLinks) {
+        this.partnerLinks = partnerLinks;
     }
 }

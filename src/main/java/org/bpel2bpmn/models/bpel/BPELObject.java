@@ -1,6 +1,7 @@
 package org.bpel2bpmn.models.bpel;
 
 import org.bpel2bpmn.models.bpel.activities.structured.Scope;
+import org.jdom.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +13,7 @@ public class BPELObject {
 
     protected BPELObject parent;
     protected HashMap<String, String> attributes = new HashMap<>();
+    private HashMap<String, Document> wsdlDocuments;
 
     public void addChild(BPELObject child) throws UnsupportedOperationException {
         throw new UnsupportedOperationException("This element cannot hold any child elements.");
@@ -52,6 +54,7 @@ public class BPELObject {
 
     public void setParent(BPELObject parent) {
         this.parent = parent;
+        this.wsdlDocuments = parent.getWsdlDocuments();
     }
 
     public HashMap<String, String> getAttributes() {
@@ -60,5 +63,17 @@ public class BPELObject {
 
     public void setAttributes(HashMap<String, String> attributes) {
         this.attributes = attributes;
+    }
+
+    public Document getWsdlDocument(String namespace) {
+        return wsdlDocuments.get(namespace);
+    }
+
+    public HashMap<String, Document> getWsdlDocuments() {
+        return wsdlDocuments;
+    }
+
+    public void setWsdlDocuments(HashMap<String, Document> wsdlDocuments) {
+        this.wsdlDocuments = wsdlDocuments;
     }
 }
