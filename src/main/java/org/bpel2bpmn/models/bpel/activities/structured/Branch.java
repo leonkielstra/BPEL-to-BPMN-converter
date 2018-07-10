@@ -24,13 +24,16 @@ public class Branch extends Activity {
     @Override
     public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) {
         FlowNode lastElement = from;
+        FlowNode currentElement;
 
         for (BPELObject child : children) {
             builder.prepareConditionalSequenceFlow(condition);
 
             if (child instanceof Activity) {
                 Activity activity = (Activity) child;
-                lastElement = activity.toBPMN(builder, lastElement);
+                currentElement = activity.toBPMN(builder, lastElement);
+                builder.createSequenceFlow(lastElement, currentElement);
+                lastElement = currentElement;
             }
         }
 

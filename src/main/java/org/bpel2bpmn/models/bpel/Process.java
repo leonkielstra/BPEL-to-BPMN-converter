@@ -72,6 +72,8 @@ public class Process extends BPELObject {
         Definitions definitions = builder.createDefinitions("bpel2bpmn");
         builder.createExecutableProcess(definitions, attributes.get("name"));
 
+        mapPartnerLinks(builder);
+
         StartEvent start = builder.createElementWithId("process_start", StartEvent.class);
 
         // Map and connect children.
@@ -89,6 +91,12 @@ public class Process extends BPELObject {
 
         Bpmn.validateModel(builder.getModelInstance());
         return builder.getModelInstance();
+    }
+
+    private void mapPartnerLinks(BPMNBuilder builder) {
+        for (PartnerLink partnerLink : partnerLinks.values()) {
+            partnerLink.toBPMN(builder);
+        }
     }
 
     /*

@@ -6,6 +6,7 @@ import org.bpel2bpmn.utilities.parsers.model.generic.PartnerLinkParser;
 import org.bpel2bpmn.utilities.validation.ValidationResult;
 import org.jdom.Attribute;
 import org.jdom.Element;
+import org.jdom.Namespace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +33,12 @@ public class ProcessParser {
         }
 
         process.addAttribute("xmlns", element.getNamespaceURI());
+
+        // Parse additional namespaces
+        for (Object object : element.getAdditionalNamespaces()) {
+            Namespace namespace = (Namespace) object;
+            process.addAttribute("xmlns:" + namespace.getPrefix(), namespace.getURI());
+        }
 
         ValidationResult validationResult = process.validate();
         if (!validationResult.isValid()) {

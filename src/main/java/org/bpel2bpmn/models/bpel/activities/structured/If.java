@@ -41,6 +41,7 @@ public class If extends Activity {
         if (elseBranch != null) {
             node = elseBranch.toBPMN(builder, divergeGateway);
             mapSequenceFlow(builder, node, joinGateway);
+            // The mapping describes a 'default' sequence flow. This is purely for notation purposes and will be ignored.
         }
 
         return joinGateway;
