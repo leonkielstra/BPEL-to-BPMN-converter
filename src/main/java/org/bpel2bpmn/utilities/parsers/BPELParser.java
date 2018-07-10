@@ -10,6 +10,7 @@ import org.bpel2bpmn.utilities.parsers.model.ProcessParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.ActivityParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.basic.WaitParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.structured.IfParser;
+import org.bpel2bpmn.utilities.parsers.model.generic.DocumentationParser;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -90,6 +91,10 @@ public class BPELParser {
                 break;
             case Activity.IF:
                 bpelObject = IfParser.parse(element);
+                parseChildren = false;
+                break;
+            case "documentation":
+                bpelObject = DocumentationParser.parse(element);
                 parseChildren = false;
                 break;
             default:

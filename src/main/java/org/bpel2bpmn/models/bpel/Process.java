@@ -52,6 +52,11 @@ public class Process extends BPELObject {
         this.children.add(child);
     }
 
+    @Override
+    public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) {
+        return from;
+    }
+
     public ValidationResult validate() {
         ValidationResult result = new ValidationResult("Process");
         if (attributes.get("name") == null) {
