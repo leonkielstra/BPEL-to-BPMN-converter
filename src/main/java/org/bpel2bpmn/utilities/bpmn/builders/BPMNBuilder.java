@@ -12,6 +12,7 @@ public class BPMNBuilder {
     private BpmnModelInstance modelInstance;
     private Process executableProcess;
     private BpmnModelElementInstance currentScope;
+    private Collaboration collaboration = null;
 
     private boolean conditionPending;
     private String condition;
@@ -89,6 +90,32 @@ public class BPMNBuilder {
     public void prepareConditionalSequenceFlow(String condition) {
         conditionPending = true;
         this.condition = condition;
+    }
+
+    public Participant createParticipant() {
+        return modelInstance.newInstance(Participant.class);
+    }
+
+    public void addParticipant(Participant participant) {
+        Definitions definitions = modelInstance.getDefinitions();
+
+        if (collaboration == null) {
+            collaboration = modelInstance.newInstance(Collaboration.class);
+
+            Participant mainParticipant = modelInstance.newInstance(Participant.class);
+            mainParticipant.setAttributeValue("name", executableProcess.getName());
+            mainParticipant.setAttributeValue("processRef", executableProcess.getId());
+            collaboration.addChildElement(mainParticipant);
+            definitions.addChildElement(collaboration);
+        }
+
+        Process externalProcess = modelInstance.newInstance(Process.class);
+        externalProcess.setId(participant.getAttributeValue("processRef"));
+        externalProcess.setName(participant.getName());
+        externalProcess.setExecutable(false);
+
+        definitions.addChildElement(externalProcess);
+        collaboration.addChildElement(participant);
     }
 
     /*
