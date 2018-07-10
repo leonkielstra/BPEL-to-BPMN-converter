@@ -44,11 +44,4 @@ public abstract class Activity extends BPELObject {
     public Activity() {
         addAttribute("suppressJoinFailure", "no");
     }
-
-    /**
-     * This method maps the BPEL object to a BPMN object.
-     * @param from the BPMN element to which the newly mapped element should be connected
-     * @return a BPMN element
-     */
-    public abstract FlowNode toBPMN(BPMNBuilder builder, FlowNode from);
 }

@@ -22,13 +22,9 @@ public class Sequence extends Activity {
         FlowNode currentElement;
 
         for (BPELObject child : children) {
-            if (child instanceof Activity) {
-                Activity activity = (Activity) child;
-                currentElement = activity.toBPMN(builder, lastElement);
-                builder.createSequenceFlow(lastElement, currentElement);
-                lastElement = currentElement;
-            }
-            // TODO: Implement non-activities (e.g. Documentation).
+            currentElement = child.toBPMN(builder, lastElement);
+            builder.createSequenceFlow(lastElement, currentElement);
+            lastElement = currentElement;
         }
 
         return lastElement;

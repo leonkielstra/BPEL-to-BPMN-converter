@@ -34,7 +34,7 @@ public class SequenceTest {
         sequence.toBPMN(builder, start);
 
         Process process = builder.getExecutableProcess();
-        Object[] children = process.getFlowElements().toArray();;
+        Object[] children = process.getFlowElements().toArray();
 
         FlowNode wait = (FlowNode) children[1];
         FlowNode exit = (FlowNode) children[3];

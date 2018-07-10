@@ -1,13 +1,15 @@
 package org.bpel2bpmn.models.bpel;
 
 import org.bpel2bpmn.models.bpel.activities.structured.Scope;
+import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
+import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.jdom.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
-public class BPELObject {
+public abstract class BPELObject {
 
     private static Logger LOG = LoggerFactory.getLogger(BPELObject.class);
 
@@ -43,6 +45,13 @@ public class BPELObject {
 
         return null;
     }
+
+    /**
+     * This method maps the BPEL object to a BPMN object.
+     * @param from the BPMN element to which the newly mapped element should be connected
+     * @return a BPMN element
+     */
+    public abstract FlowNode toBPMN(BPMNBuilder builder, FlowNode from);
 
     /*
      * Getters & Setters
