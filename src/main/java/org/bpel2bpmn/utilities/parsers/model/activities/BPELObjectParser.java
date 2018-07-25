@@ -1,5 +1,6 @@
 package org.bpel2bpmn.utilities.parsers.model.activities;
 
+import org.bpel2bpmn.models.bpel.BPELObject;
 import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.jdom.Attribute;
 import org.jdom.Element;
@@ -9,28 +10,28 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * This is a generic parser that can parse any activity that only has the standard attributes.
+ * This is a generic parser that can parse any BPELObject that only has the standard attributes.
  */
-public class ActivityParser {
+public class BPELObjectParser {
 
-    private static Logger LOG = LoggerFactory.getLogger(ActivityParser.class);
+    private static Logger LOG = LoggerFactory.getLogger(BPELObjectParser.class);
 
     /**
-     * This method parses the activity with its standard attributes.
+     * This method parses the BPEL object with its standard attributes.
      *
      * @param element XML element to be parsed
-     * @param activityClass The class to which it should be parsed
+     * @param BPELObjectClass The class to which it should be parsed
      * @param <T>
      * @return parsed activity
      */
-    public static <T extends Activity> T parse(Element element, Class<T> activityClass) {
+    public static <T extends BPELObject> T parse(Element element, Class<T> BPELObjectClass) {
         try {
-            T activity = activityClass.getDeclaredConstructor().newInstance();
+            T activity = BPELObjectClass.getDeclaredConstructor().newInstance();
             parseAttributes(activity, element);
 
             return activity;
         } catch (InstantiationException e) {
-            LOG.error("Could not instantiate " + activityClass.toString());
+            LOG.error("Could not instantiate " + BPELObjectClass.toString());
             e.printStackTrace();
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             LOG.error(e.getMessage());
@@ -41,17 +42,17 @@ public class ActivityParser {
     }
 
     /**
-     * This method parses the standard attributes of an activity, iff they are defined.
+     * This method parses the standard attributes of a BPEL object, iff they are defined.
      *
-     * @param activity to add the attributes to
+     * @param bpelObject to add the attributes to
      * @param element to extract the attributes from
      * @param <T>
      */
-    private static <T extends Activity> void parseAttributes(T activity, Element element) {
+    private static <T extends BPELObject> void parseAttributes(T bpelObject, Element element) {
         for (String attributeName : Activity.STANDARD_ATTRIBUTES) {
             Attribute attribute = element.getAttribute(attributeName);
             if (attribute != null) {
-                activity.addAttribute(attributeName, attribute.getValue());
+                bpelObject.addAttribute(attributeName, attribute.getValue());
             }
         }
     }

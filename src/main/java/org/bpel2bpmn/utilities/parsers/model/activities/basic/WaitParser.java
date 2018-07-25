@@ -1,7 +1,7 @@
 package org.bpel2bpmn.utilities.parsers.model.activities.basic;
 
 import org.bpel2bpmn.models.bpel.activities.basic.Wait;
-import org.bpel2bpmn.utilities.parsers.model.activities.ActivityParser;
+import org.bpel2bpmn.utilities.parsers.model.activities.BPELObjectParser;
 import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,7 @@ public class WaitParser {
     private final static String EXP_LANGUAGE = "expressionLanguage";
 
     public static Wait parse(Element element) throws IllegalStateException {
-        Wait wait = ActivityParser.parse(element, Wait.class);
+        Wait wait = BPELObjectParser.parse(element, Wait.class);
         parseElements(element, wait);
 
         return wait;
