@@ -3,7 +3,7 @@ package org.bpel2bpmn.utilities.parsers.model.activities.structured;
 import org.bpel2bpmn.models.bpel.activities.structured.Branch;
 import org.bpel2bpmn.models.bpel.activities.structured.If;
 import org.bpel2bpmn.utilities.parsers.BPELParser;
-import org.bpel2bpmn.utilities.parsers.model.activities.ActivityParser;
+import org.bpel2bpmn.utilities.parsers.model.activities.BPELObjectParser;
 import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,7 @@ public class IfParser {
     private static Logger LOG = LoggerFactory.getLogger(IfParser.class);
 
     public static If parse(Element element) throws IllegalStateException {
-        If bpelIf = ActivityParser.parse(element, If.class);
+        If bpelIf = BPELObjectParser.parse(element, If.class);
         parseElements(element, bpelIf);
 
         return bpelIf;
