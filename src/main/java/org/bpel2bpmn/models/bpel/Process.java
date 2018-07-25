@@ -84,9 +84,7 @@ public class Process extends BPELObject {
         // Map and connect children.
         FlowNode lastElement = start;
         for (BPELObject child : children) {
-            // TODO: Implement non-activities.
-            Activity activity = (Activity) child;
-            lastElement = activity.toBPMN(builder, start);
+            lastElement = child.toBPMN(builder, start);
         }
 
         if (lastElement.getClass() != EndEventImpl.class) {

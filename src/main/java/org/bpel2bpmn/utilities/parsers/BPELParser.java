@@ -12,7 +12,9 @@ import org.bpel2bpmn.utilities.parsers.model.activities.basic.WaitParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.structured.IfParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.structured.PickParser;
 import org.bpel2bpmn.utilities.parsers.model.generic.DocumentationParser;
+import org.bpel2bpmn.utilities.parsers.model.generic.ImportParser;
 import org.bpel2bpmn.utilities.parsers.model.generic.PartnerLinksParser;
+import org.bpel2bpmn.utilities.validation.ValidationResult;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -89,9 +91,10 @@ public class BPELParser {
                 bpelObject = IfParser.parse(element);
                 parseChildren = false;
                 break;
-            case "import":
-                bpelObject = BPELObjectParser.parse(element, Import.class);
-                break;
+//            case "import":
+//                bpelObject = ImportParser.parse(element);
+//                parseChildren = false;
+//                break;
             case "partnerlinks":
                 PartnerLinksParser.parse(element);
                 bpelObject = null;
