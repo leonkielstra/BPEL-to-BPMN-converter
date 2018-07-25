@@ -1,17 +1,16 @@
 package org.bpel2bpmn.models.bpel.activities.basic;
 
 import factories.BPMNBuilderFactory;
-import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.builders.BPMNBuilder;
 import org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl;
 import org.camunda.bpm.model.bpmn.impl.instance.TimerEventDefinitionImpl;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
-import org.camunda.bpm.model.bpmn.instance.IntermediateCatchEvent;
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
 import org.camunda.bpm.model.bpmn.instance.TimerEventDefinition;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class WaitTest {
 

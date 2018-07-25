@@ -1,7 +1,7 @@
 package org.bpel2bpmn.models.bpel.activities.structured;
 
 import org.bpel2bpmn.models.bpel.activities.Activity;
-import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.builders.BPMNBuilder;
 import org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl;
 import org.camunda.bpm.model.bpmn.instance.ExclusiveGateway;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;

@@ -1,8 +1,6 @@
 package org.bpel2bpmn.models.bpel.activities;
 
 import org.bpel2bpmn.models.bpel.BPELObject;
-import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
-import org.camunda.bpm.model.bpmn.instance.FlowNode;
 
 public abstract class Activity extends BPELObject {
 

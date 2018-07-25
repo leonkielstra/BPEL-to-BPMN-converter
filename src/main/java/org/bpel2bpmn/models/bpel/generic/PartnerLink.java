@@ -1,7 +1,7 @@
 package org.bpel2bpmn.models.bpel.generic;
 
 import org.bpel2bpmn.models.bpel.BPELObject;
-import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.builders.BPMNBuilder;
 import org.bpel2bpmn.utilities.validation.ValidationResult;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.camunda.bpm.model.bpmn.instance.Participant;
@@ -28,9 +28,10 @@ public class PartnerLink extends BPELObject {
         if (attributes.get("partnerRole") == null) {
             return;
         }
+
         Participant participant = builder.createParticipant();
-        participant.setName(attributes.get("partnerRole"));
-        participant.setAttributeValue("processRef", attributes.get("partnerRole") + "Process");
+        participant.setName(getPartnerRole());
+        participant.setAttributeValue("processRef", getPartnerRole() + "Process");
         builder.addParticipant(participant);
     }
 
@@ -61,5 +62,13 @@ public class PartnerLink extends BPELObject {
 
     public String getName() {
         return attributes.get("name");
+    }
+
+    public String getMyRole() {
+        return attributes.get("myRole");
+    }
+
+    public String getPartnerRole() {
+        return attributes.get("partnerRole");
     }
 }

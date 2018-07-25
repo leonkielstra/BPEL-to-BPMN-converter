@@ -1,6 +1,6 @@
 package factories;
 
-import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.builders.BPMNBuilder;
 import org.camunda.bpm.model.bpmn.instance.Definitions;
 
 public class BPMNBuilderFactory {
