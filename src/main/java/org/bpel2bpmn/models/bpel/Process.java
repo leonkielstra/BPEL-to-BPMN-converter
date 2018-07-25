@@ -2,7 +2,7 @@ package org.bpel2bpmn.models.bpel;
 
 import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.models.bpel.generic.PartnerLink;
-import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.builders.BPMNBuilder;
 import org.bpel2bpmn.utilities.validation.ValidationResult;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;

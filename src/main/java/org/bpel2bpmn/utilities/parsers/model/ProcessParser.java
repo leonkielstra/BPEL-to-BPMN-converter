@@ -2,7 +2,7 @@ package org.bpel2bpmn.utilities.parsers.model;
 
 import org.bpel2bpmn.models.bpel.Process;
 import org.bpel2bpmn.models.bpel.generic.PartnerLink;
-import org.bpel2bpmn.utilities.parsers.model.generic.PartnerLinkParser;
+import org.bpel2bpmn.utilities.parsers.model.generic.PartnerLinksParser;
 import org.bpel2bpmn.utilities.validation.ValidationResult;
 import org.jdom.Attribute;
 import org.jdom.Element;
@@ -57,7 +57,7 @@ public class ProcessParser {
         }
 
         if (partnerLinksElement != null) {
-            HashMap<String, PartnerLink> partnerLinks = PartnerLinkParser.parse(partnerLinksElement);
+            HashMap<String, PartnerLink> partnerLinks = PartnerLinksParser.parse(partnerLinksElement);
             process.setPartnerLinks(partnerLinks);
         }
     }

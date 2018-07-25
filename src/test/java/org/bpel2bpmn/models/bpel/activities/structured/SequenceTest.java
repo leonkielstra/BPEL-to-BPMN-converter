@@ -3,8 +3,10 @@ package org.bpel2bpmn.models.bpel.activities.structured;
 import factories.BPMNBuilderFactory;
 import org.bpel2bpmn.models.bpel.activities.basic.Exit;
 import org.bpel2bpmn.models.bpel.activities.basic.Wait;
-import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
-import org.camunda.bpm.model.bpmn.impl.instance.*;
+import org.bpel2bpmn.utilities.builders.BPMNBuilder;
+import org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl;
+import org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl;
+import org.camunda.bpm.model.bpmn.impl.instance.SequenceFlowImpl;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.camunda.bpm.model.bpmn.instance.Process;
 import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
@@ -12,7 +14,7 @@ import org.camunda.bpm.model.bpmn.instance.StartEvent;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class SequenceTest {
 

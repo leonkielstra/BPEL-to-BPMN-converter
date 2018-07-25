@@ -1,30 +1,32 @@
 package org.bpel2bpmn.models.bpel.activities.structured;
 
 import org.bpel2bpmn.models.bpel.activities.Activity;
-import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.builders.BPMNBuilder;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
+
+import java.util.ArrayList;
 
 public class Pick extends Activity {
 
-    private boolean createInstance;
+    private ArrayList<OnMessage> messageEvents;
+    private ArrayList<OnAlarm> alarmEvents;
 
-    // TODO: Implement onAlarm and onMessage
-
-    public Pick(boolean createInstance) {
+    public Pick() {
         super();
-        this.createInstance = createInstance;
+        messageEvents = new ArrayList<>();
+        alarmEvents = new ArrayList<>();
+    }
+
+    public void addMessageEvent(OnMessage messageEvent) {
+        this.messageEvents.add(messageEvent);
+    }
+
+    public void addAlarmEvent(OnAlarm alarmEvent) {
+        this.alarmEvents.add(alarmEvent);
     }
 
     @Override
     public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) {
         return null;
-    }
-
-    public boolean shouldCreateInstance() {
-        return createInstance;
-    }
-
-    public void setCreateInstance(boolean createInstance) {
-        this.createInstance = createInstance;
     }
 }

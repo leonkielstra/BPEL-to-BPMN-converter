@@ -1,4 +1,4 @@
-package org.bpel2bpmn.utilities.bpmn.builders;
+package org.bpel2bpmn.utilities.builders;
 
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
@@ -107,6 +107,13 @@ public class BPMNBuilder {
             mainParticipant.setAttributeValue("processRef", executableProcess.getId());
             collaboration.addChildElement(mainParticipant);
             definitions.addChildElement(collaboration);
+        }
+
+        // Do not add participant if it already exists.
+        for (Participant existingParticipant : collaboration.getParticipants()) {
+            if (existingParticipant.getName().equals(participant.getName())) {
+                return;
+            }
         }
 
         Process externalProcess = modelInstance.newInstance(Process.class);

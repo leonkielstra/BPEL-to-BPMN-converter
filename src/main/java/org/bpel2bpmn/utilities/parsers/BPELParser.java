@@ -6,11 +6,14 @@ import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.models.bpel.activities.basic.Empty;
 import org.bpel2bpmn.models.bpel.activities.basic.Exit;
 import org.bpel2bpmn.models.bpel.activities.structured.Sequence;
+import org.bpel2bpmn.models.bpel.generic.PartnerLink;
 import org.bpel2bpmn.utilities.parsers.model.ProcessParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.ActivityParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.basic.WaitParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.structured.IfParser;
+import org.bpel2bpmn.utilities.parsers.model.activities.structured.PickParser;
 import org.bpel2bpmn.utilities.parsers.model.generic.DocumentationParser;
+import org.bpel2bpmn.utilities.parsers.model.generic.PartnerLinksParser;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -73,11 +76,9 @@ public class BPELParser {
 
         boolean parseChildren = true; // If false, children are parsed within element parser.
         switch (element.getName().toLowerCase()) {
-            case "process":
-                bpelObject = ProcessParser.parse(element);
-                break;
-            case Activity.SEQUENCE:
-                bpelObject = ActivityParser.parse(element, Sequence.class);
+            case "documentation":
+                bpelObject = DocumentationParser.parse(element);
+                parseChildren = false;
                 break;
             case Activity.EMPTY:
                 bpelObject = ActivityParser.parse(element, Empty.class);
@@ -85,16 +86,27 @@ public class BPELParser {
             case Activity.EXIT:
                 bpelObject = ActivityParser.parse(element, Exit.class);
                 break;
-            case Activity.WAIT:
-                bpelObject = WaitParser.parse(element);
-                parseChildren = false;
-                break;
             case Activity.IF:
                 bpelObject = IfParser.parse(element);
                 parseChildren = false;
                 break;
-            case "documentation":
-                bpelObject = DocumentationParser.parse(element);
+            case "partnerlinks":
+                PartnerLinksParser.parse(element);
+                bpelObject = null;
+                parseChildren = false;
+                break;
+            case Activity.PICK:
+                bpelObject = PickParser.parse(element);
+                parseChildren = false;
+                break;
+            case "process":
+                bpelObject = ProcessParser.parse(element);
+                break;
+            case Activity.SEQUENCE:
+                bpelObject = ActivityParser.parse(element, Sequence.class);
+                break;
+            case Activity.WAIT:
+                bpelObject = WaitParser.parse(element);
                 parseChildren = false;
                 break;
             default:

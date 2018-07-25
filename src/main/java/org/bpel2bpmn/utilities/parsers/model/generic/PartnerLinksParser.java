@@ -7,29 +7,34 @@ import org.jdom.Element;
 
 import java.util.HashMap;
 
-public class PartnerLinkParser {
+public class PartnerLinksParser {
 
     public static HashMap<String, PartnerLink> parse(Element element) throws IllegalStateException {
         HashMap<String, PartnerLink> partnerLinks = new HashMap<>();
 
         for (Object child : element.getChildren()) {
-            Element partnerLinkElement = (Element) child;
-            if (!partnerLinkElement.getName().equals("partnerLink")) {
+            Element childElement = (Element) child;
+            if (!childElement.getName().equals("partnerLink")) {
                 continue;
             }
 
-            PartnerLink partnerLink = new PartnerLink();
-            parseAttributes(partnerLink, partnerLinkElement);
-
-            ValidationResult validationResult = partnerLink.validate();
-            if (!validationResult.isValid()) {
-                throw new IllegalStateException(validationResult.getMessage());
-            }
-
+            PartnerLink partnerLink = parsePartnerLink((Element) child);
             partnerLinks.put(partnerLink.getName(), partnerLink);
         }
 
         return partnerLinks;
+    }
+
+    private static PartnerLink parsePartnerLink(Element element) throws IllegalStateException {
+        PartnerLink partnerLink = new PartnerLink();
+        parseAttributes(partnerLink, element);
+
+        ValidationResult validationResult = partnerLink.validate();
+        if (!validationResult.isValid()) {
+            throw new IllegalStateException(validationResult.getMessage());
+        }
+
+        return partnerLink;
     }
 
     private static void parseAttributes(PartnerLink partnerLink, Element element) {

@@ -1,7 +1,7 @@
 package org.bpel2bpmn.models.bpel;
 
 import org.bpel2bpmn.models.bpel.activities.structured.Scope;
-import org.bpel2bpmn.utilities.bpmn.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.builders.BPMNBuilder;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.jdom.Document;
 import org.slf4j.Logger;
