@@ -26,18 +26,20 @@ public class IfParser {
         branch = parseBranch(element, bpelIf, true);
         bpelIf.setIfBranch(branch);
 
-        // Parse elseif branches
-        for (Object elseIfObject : element.getChildren("elseif")) {
-            Element elseIfElement = (Element) elseIfObject;
-            branch = parseBranch(elseIfElement, bpelIf, true);
-            bpelIf.addElseIfBranch(branch);
-        }
+        for (Object object : element.getChildren()) {
+            Element child = (Element) object;
 
-        // Parse else branch
-        Element elseElement = element.getChild("else");
-        if (elseElement != null) {
-            branch = parseBranch(elseElement, bpelIf, false);
-            bpelIf.setElseBranch(branch);
+            // Parse elsif branches
+            if (child.getName().equals("elseif")) {
+                branch = parseBranch(child, bpelIf, true);
+                bpelIf.addElseIfBranch(branch);
+            }
+
+            // Parse if branch
+            if (child.getName().equals("else")) {
+                branch = parseBranch(child, bpelIf, false);
+                bpelIf.setElseBranch(branch);
+            }
         }
     }
 

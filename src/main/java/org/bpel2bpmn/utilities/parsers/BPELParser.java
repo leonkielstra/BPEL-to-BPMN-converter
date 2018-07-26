@@ -1,5 +1,6 @@
 package org.bpel2bpmn.utilities.parsers;
 
+import org.bpel2bpmn.models.bpel.BPELObject;
 import org.bpel2bpmn.models.bpel.Process;
 import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.models.bpel.activities.basic.Empty;
@@ -8,6 +9,7 @@ import org.bpel2bpmn.models.bpel.activities.structured.Sequence;
 import org.bpel2bpmn.models.bpel.generic.Import;
 import org.bpel2bpmn.utilities.parsers.model.ProcessParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.BPELObjectParser;
+import org.bpel2bpmn.utilities.parsers.model.activities.basic.ThrowParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.basic.WaitParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.structured.IfParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.structured.PickParser;
@@ -95,11 +97,6 @@ public class BPELParser {
 //                bpelObject = ImportParser.parse(element);
 //                parseChildren = false;
 //                break;
-            case "partnerlinks":
-                PartnerLinksParser.parse(element);
-                bpelObject = null;
-                parseChildren = false;
-                break;
             case Activity.PICK:
                 bpelObject = PickParser.parse(element);
                 parseChildren = false;
@@ -109,6 +106,10 @@ public class BPELParser {
                 break;
             case Activity.SEQUENCE:
                 bpelObject = BPELObjectParser.parse(element, Sequence.class);
+                break;
+            case Activity.THROW:
+                bpelObject = ThrowParser.parse(element);
+                parseChildren = false;
                 break;
             case Activity.WAIT:
                 bpelObject = WaitParser.parse(element);
@@ -126,7 +127,7 @@ public class BPELParser {
     public static void parseChildren(org.bpel2bpmn.models.bpel.BPELObject bpelObject, Element element) {
         for (Object child : element.getChildren()) {
             Element childElement = (Element) child;
-            org.bpel2bpmn.models.bpel.BPELObject parsedChild = parseElement(childElement);
+            BPELObject parsedChild = parseElement(childElement);
             if (bpelObject != null && parsedChild != null) {
                 bpelObject.addChild(parsedChild);
                 parsedChild.setParent(bpelObject);
