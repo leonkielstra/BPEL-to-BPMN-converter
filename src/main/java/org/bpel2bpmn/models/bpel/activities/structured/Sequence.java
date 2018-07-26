@@ -23,7 +23,9 @@ public class Sequence extends Activity {
 
         for (BPELObject child : children) {
             currentElement = child.toBPMN(builder, lastElement);
-            builder.createSequenceFlow(lastElement, currentElement);
+            if (!lastElement.equals(currentElement)) {
+                builder.createSequenceFlow(lastElement, currentElement);
+            }
             lastElement = currentElement;
         }
 

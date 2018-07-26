@@ -19,16 +19,16 @@ public class While extends LoopActivity {
     public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) {
         FlowNode subProcess;
 
+        ExclusiveGateway afterGateway = builder.createElement(ExclusiveGateway.class);
+        ExclusiveGateway beforeGateway = builder.createElement(ExclusiveGateway.class);
+
         if (children.size() != 1 || !(children.get(0) instanceof Scope)) {
             subProcess = builder.createElement(SubProcess.class);
             builder.setCurrentScope(subProcess);
 
             FlowNode lastNode = builder.createElement(StartEvent.class);
-            FlowNode current;
             for (BPELObject child : children) {
-                current = child.toBPMN(builder, lastNode);
-                builder.createSequenceFlow(lastNode, current);
-                lastNode = current;
+                lastNode = child.toBPMN(builder, lastNode);
             }
 
             FlowNode end = builder.createElement(EndEvent.class);
@@ -36,15 +36,18 @@ public class While extends LoopActivity {
 
             builder.setCurrentScope((BpmnModelElementInstance) subProcess.getParentElement());
         } else {
-            subProcess = children.get(0).toBPMN(builder, from);
+            subProcess = children.get(0).toBPMN(builder, beforeGateway);
         }
 
-        ExclusiveGateway exclusiveGateway = builder.createElement(ExclusiveGateway.class);
-        builder.createSequenceFlow(subProcess, exclusiveGateway);
+        builder.prepareConditionalSequenceFlow(condition);
+        builder.createSequenceFlow(beforeGateway, subProcess);
+        builder.createSequenceFlow(beforeGateway, afterGateway);
+
+        builder.createSequenceFlow(subProcess, afterGateway);
 
         builder.prepareConditionalSequenceFlow(condition);
-        builder.createSequenceFlow(exclusiveGateway, subProcess);
+        builder.createSequenceFlow(afterGateway, subProcess);
 
-        return exclusiveGateway;
+        return afterGateway;
     }
 }

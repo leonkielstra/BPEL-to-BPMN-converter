@@ -18,7 +18,7 @@ Here is a list of BPEL elements and whether there are implemented or not.
 - [x] PartnerLink (without WSDL interfaces + messages)
 - [ ] Pick
 - [ ] Receive
-- [ ] RepeatUntil (this needs a mapping for expression languages)
+- [x] RepeatUntil (this needs a mapping for expression languages)
 - [ ] Reply
 - [ ] Rethrow
 - [ ] Scope
