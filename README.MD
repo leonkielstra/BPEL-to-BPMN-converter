@@ -5,7 +5,7 @@ The BPEL-to-BPMN converter is a tool to convert a BPEL document to a valid BPMN 
 
 ## Current State
 Here is a list of BPEL elements and whether there are implemented or not.
-- [ ] Assign
+- [ ] Assign (this isn't fully mappable)
 - [ ] CorrelationSets
 - [x] Empty
 - [x] Exit
@@ -18,12 +18,12 @@ Here is a list of BPEL elements and whether there are implemented or not.
 - [x] PartnerLink (without WSDL interfaces + messages)
 - [ ] Pick
 - [ ] Receive
-- [ ] RepeatUntil
+- [ ] RepeatUntil (this needs a mapping for expression languages)
 - [ ] Reply
 - [ ] Rethrow
 - [ ] Scope
 - [x] Sequence
-- [ ] Throw
+- [x] Throw
 - [ ] Variables
 - [x] Wait
 - [ ] While
