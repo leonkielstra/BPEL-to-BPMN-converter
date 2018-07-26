@@ -29,12 +29,9 @@ public class Branch extends Activity {
         for (BPELObject child : children) {
             builder.prepareConditionalSequenceFlow(condition);
 
-            if (child instanceof Activity) {
-                Activity activity = (Activity) child;
-                currentElement = activity.toBPMN(builder, lastElement);
-                builder.createSequenceFlow(lastElement, currentElement);
-                lastElement = currentElement;
-            }
+            currentElement = child.toBPMN(builder, lastElement);
+            builder.createSequenceFlow(lastElement, currentElement);
+            lastElement = currentElement;
         }
 
         return lastElement;

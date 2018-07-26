@@ -8,7 +8,7 @@ import org.jdom.Element;
 
 public class ImportParser {
 
-    public static Import parse(Element element) {
+    public static Import parse(Element element) throws IllegalStateException {
         Import importInstance = BPELObjectParser.parse(element, Import.class);
         parseAttributes(importInstance, element);
 
