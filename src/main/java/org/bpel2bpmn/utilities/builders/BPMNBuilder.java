@@ -1,5 +1,6 @@
 package org.bpel2bpmn.utilities.builders;
 
+import org.bpel2bpmn.models.bpel.generic.PartnerLink;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.*;
@@ -8,6 +9,8 @@ import org.camunda.bpm.model.bpmn.instance.Process;
 public class BPMNBuilder {
 
     private static final String BPMN_NAMESPACE = "http://bpmn.io/schema/bpmn";
+
+    private org.bpel2bpmn.models.bpel.Process bpelProcess;
 
     private BpmnModelInstance modelInstance;
     private Process executableProcess;
@@ -18,7 +21,12 @@ public class BPMNBuilder {
     private String condition;
 
     public BPMNBuilder() {
+        this(null);
+    }
+
+    public BPMNBuilder(org.bpel2bpmn.models.bpel.Process process) {
         this.modelInstance = Bpmn.createEmptyModel();
+        this.bpelProcess = process;
     }
 
     public Definitions createDefinitions(String exporter) {
@@ -123,6 +131,29 @@ public class BPMNBuilder {
 
         definitions.addChildElement(externalProcess);
         collaboration.addChildElement(participant);
+    }
+
+    public void createMessageFlow(FlowNode node, String partnerLinkName, boolean incoming) {
+        PartnerLink partnerLink = bpelProcess.getPartnerLinks().get(partnerLinkName);
+        if (partnerLink != null) {
+            for (Participant participant : collaboration.getParticipants()) {
+                if (participant.getName().equals(partnerLink.getPartnerRole())) {
+                    Process process = participant.getProcess();
+
+                    MessageFlow messageFlow = modelInstance.newInstance(MessageFlow.class);
+                    if (incoming) {
+                        messageFlow.setAttributeValue("targetRef", node.getId());
+                        messageFlow.setSource(participant);
+                    } else {
+                        messageFlow.setTarget(participant);
+                        messageFlow.setAttributeValue("sourceRef", node.getId());
+                    }
+                    collaboration.addChildElement(messageFlow);
+
+                    return;
+                }
+            }
+        }
     }
 
     /*
