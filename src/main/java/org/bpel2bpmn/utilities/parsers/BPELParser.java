@@ -6,17 +6,15 @@ import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.models.bpel.activities.basic.Empty;
 import org.bpel2bpmn.models.bpel.activities.basic.Exit;
 import org.bpel2bpmn.models.bpel.activities.structured.Sequence;
-import org.bpel2bpmn.models.bpel.generic.Import;
+import org.bpel2bpmn.models.bpel.activities.structured.While;
 import org.bpel2bpmn.utilities.parsers.model.ProcessParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.BPELObjectParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.basic.ThrowParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.basic.WaitParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.structured.IfParser;
+import org.bpel2bpmn.utilities.parsers.model.activities.structured.LoopParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.structured.PickParser;
 import org.bpel2bpmn.utilities.parsers.model.generic.DocumentationParser;
-import org.bpel2bpmn.utilities.parsers.model.generic.ImportParser;
-import org.bpel2bpmn.utilities.parsers.model.generic.PartnerLinksParser;
-import org.bpel2bpmn.utilities.validation.ValidationResult;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -113,6 +111,10 @@ public class BPELParser {
                 break;
             case Activity.WAIT:
                 bpelObject = WaitParser.parse(element);
+                parseChildren = false;
+                break;
+            case Activity.WHILE:
+                bpelObject = LoopParser.parse(element, While.class);
                 parseChildren = false;
                 break;
             default:
