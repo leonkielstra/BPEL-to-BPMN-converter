@@ -26,7 +26,7 @@ Here is a list of BPEL elements and whether there are implemented or not.
 - [x] Throw
 - [ ] Variables
 - [x] Wait
-- [ ] While
+- [x] While
 
 ## Getting Started
 To setup this converter locally and getting ready to develop on the converter you'll need the following:
