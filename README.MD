@@ -10,6 +10,7 @@ Here is a list of BPEL elements and whether there are implemented or not.
 - [x] Empty
 - [x] Exit
 - [x] Documentation
+- [ ] FaultHandlers
 - [ ] Flow
 - [ ] ForEach
 - [x] If
@@ -17,7 +18,7 @@ Here is a list of BPEL elements and whether there are implemented or not.
 - [ ] Invoke
 - [x] PartnerLink (without WSDL interfaces + messages)
 - [ ] Pick
-- [ ] Receive
+- [x] Receive
 - [x] RepeatUntil (this needs a mapping for expression languages)
 - [ ] Reply
 - [ ] Rethrow

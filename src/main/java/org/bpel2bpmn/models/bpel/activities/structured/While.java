@@ -1,13 +1,8 @@
 package org.bpel2bpmn.models.bpel.activities.structured;
 
 import org.bpel2bpmn.models.bpel.BPELObject;
-import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.impl.instance.LoopCharacteristicsImpl;
 import org.camunda.bpm.model.bpmn.instance.*;
-
-import java.util.ArrayList;
 
 public class While extends LoopActivity {
 
