@@ -33,27 +33,10 @@ public class BPELParser {
 
     private static Logger LOG = LoggerFactory.getLogger(BPELParser.class);
 
-    public static Process parse(MultipartFile bpelFile, MultipartFile[] wsdlFiles) throws IOException {
+    public static Process parse(MultipartFile bpelFile, HashMap<String, Document> wsdlList) throws IOException {
         SAXBuilder builder = new SAXBuilder();
         InputStream inputStream;
 
-        // Parse WSDL files
-        HashMap<String, Document> wsdlDocuments = new HashMap<>();
-        Document wsdlDocument;
-        String targetNamespace;
-        for (MultipartFile wsdlFile : wsdlFiles) {
-            try {
-                inputStream = wsdlFile.getInputStream();
-                wsdlDocument = builder.build(inputStream);
-                targetNamespace = wsdlDocument.getRootElement().getAttributeValue("targetNamespace");
-                wsdlDocuments.put(targetNamespace, wsdlDocument);
-            } catch (IOException | JDOMException e) {
-                LOG.error("Could not parse this WSDL file:");
-                LOG.error(e.getMessage());
-            }
-        }
-
-        // Parse BPEL file
         try {
             inputStream = bpelFile.getInputStream();
             Document bpelXML = builder.build(inputStream);
@@ -61,9 +44,8 @@ public class BPELParser {
             Element root = bpelXML.getRootElement();
             Process process = (Process) parseElement(root);
             if (process != null) {
-                process.setWsdlDocuments(wsdlDocuments);
+                process.setWsdlDocuments(wsdlList);
             }
-
             return process;
         } catch (IOException | JDOMException e) {
             LOG.error("Could not parse this BPEL file:");
