@@ -2,8 +2,10 @@ package org.bpel2bpmn.controllers;
 
 import org.bpel2bpmn.models.bpel.Process;
 import org.bpel2bpmn.utilities.parsers.BPELParser;
+import org.bpel2bpmn.utilities.parsers.WSDLParser;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import org.jdom.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 @RestController
 public class BPELController {
@@ -29,7 +32,8 @@ public class BPELController {
                     consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity convertToBPMN(@RequestParam("bpel") MultipartFile bpelFile, @RequestParam("wsdl") MultipartFile[] wsdlFiles) {
         try {
-            Process bpelProcess = BPELParser.parse(bpelFile, wsdlFiles);
+            HashMap<String, Document> wsdlList = WSDLParser.parse(wsdlFiles);
+            Process bpelProcess = BPELParser.parse(bpelFile, wsdlList);
 
             BpmnModelInstance bpmnProcess = bpelProcess.toBPMN();
             String xml = Bpmn.convertToString(bpmnProcess);
