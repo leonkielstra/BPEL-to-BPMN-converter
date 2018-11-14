@@ -1,5 +1,6 @@
 package org.bpel2bpmn.utilities.parsers;
 
+import org.bpel2bpmn.exceptions.WSDLParseException;
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
@@ -15,20 +16,25 @@ public class WSDLParser {
 
     private static Logger LOG = LoggerFactory.getLogger(WSDLParser.class);
 
-    public static HashMap<String, Document> parse(MultipartFile[] wsdlFiles) throws IOException, JDOMException {
+    public static HashMap<String, Document> parse(MultipartFile[] wsdlFiles) throws WSDLParseException {
         SAXBuilder builder = new SAXBuilder();
         InputStream inputStream = null;
 
         HashMap<String, Document> wsdlList = new HashMap<>();
         Document wsdlDocument;
         String targetNamespace;
-        for (MultipartFile wsdlFile : wsdlFiles) {
-            inputStream = wsdlFile.getInputStream();
-            wsdlDocument = builder.build(inputStream);
-            targetNamespace = wsdlDocument.getRootElement().getAttributeValue("targetNamespace");
-            wsdlList.put(targetNamespace, wsdlDocument);
-        }
 
-        return wsdlList;
+        try {
+            for (MultipartFile wsdlFile : wsdlFiles) {
+                inputStream = wsdlFile.getInputStream();
+                wsdlDocument = builder.build(inputStream);
+                targetNamespace = wsdlDocument.getRootElement().getAttributeValue("targetNamespace");
+                wsdlList.put(targetNamespace, wsdlDocument);
+            }
+
+            return wsdlList;
+        } catch (IOException | JDOMException e) {
+            throw new WSDLParseException(e.getMessage());
+        }
     }
 }

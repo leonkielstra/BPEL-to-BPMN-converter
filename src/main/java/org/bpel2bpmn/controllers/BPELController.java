@@ -1,6 +1,8 @@
 package org.bpel2bpmn.controllers;
 
 import org.bpel2bpmn.exceptions.BPELConversionException;
+import org.bpel2bpmn.exceptions.BPELParseException;
+import org.bpel2bpmn.exceptions.WSDLParseException;
 import org.bpel2bpmn.models.bpel.Process;
 import org.bpel2bpmn.utilities.parsers.BPELParser;
 import org.bpel2bpmn.utilities.parsers.WSDLParser;
@@ -35,32 +37,26 @@ public class BPELController {
     public ResponseEntity convertToBPMN(@RequestParam("bpel") MultipartFile bpelFile, @RequestParam("wsdl") MultipartFile[] wsdlFiles) {
         HashMap<String, Document> wsdlList = null;
         Process bpelProcess = null;
-
+        
         try {
             wsdlList = WSDLParser.parse(wsdlFiles);
-        } catch (IOException | JDOMException e) {
+            bpelProcess = BPELParser.parse(bpelFile, wsdlList);
+            BpmnModelInstance bpmnProcess = bpelProcess.toBPMN();
+            String xml = Bpmn.convertToString(bpmnProcess);
+
+            return ResponseEntity.status(HttpStatus.OK).body(xml);
+        } catch (WSDLParseException e) {
             LOG.error("WSDL parse error;");
             LOG.error(e.getMessage());
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Error when parsing WSDL files; " + e.getMessage());
-        }
-
-        try {
-            bpelProcess = BPELParser.parse(bpelFile, wsdlList);
-        } catch (IOException | JDOMException e) {
+        } catch (BPELParseException e) {
             LOG.error("BPEL parse error;");
             LOG.error(e.getMessage());
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Error when parsing BPEL file; " + e.getMessage());
-        }
-
-        try {
-            BpmnModelInstance bpmnProcess = bpelProcess.toBPMN();
-            String xml = Bpmn.convertToString(bpmnProcess);
-
-            return ResponseEntity.status(HttpStatus.OK).body(xml);
         } catch (BPELConversionException e) {
             LOG.error("BPEL conversion error;");
             LOG.error(e.getMessage());
@@ -69,7 +65,4 @@ public class BPELController {
                     .body("This BPEL file cannot be converted; " + e.getMessage());
         }
     }
-
-    // TODO: Extract try catches to private methods.
-
 }

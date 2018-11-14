@@ -1,5 +1,6 @@
 package org.bpel2bpmn.utilities.parsers;
 
+import org.bpel2bpmn.exceptions.BPELParseException;
 import org.bpel2bpmn.models.bpel.BPELObject;
 import org.bpel2bpmn.models.bpel.Process;
 import org.bpel2bpmn.models.bpel.activities.Activity;
@@ -34,20 +35,24 @@ public class BPELParser {
 
     private static Logger LOG = LoggerFactory.getLogger(BPELParser.class);
 
-    public static Process parse(MultipartFile bpelFile, HashMap<String, Document> wsdlList) throws IOException, JDOMException {
+    public static Process parse(MultipartFile bpelFile, HashMap<String, Document> wsdlList) throws BPELParseException {
         SAXBuilder builder = new SAXBuilder();
         InputStream inputStream;
 
-        inputStream = bpelFile.getInputStream();
-        Document bpelXML = builder.build(inputStream);
+        try {
+            inputStream = bpelFile.getInputStream();
+            Document bpelXML = builder.build(inputStream);
 
-        Element root = bpelXML.getRootElement();
-        Process process = (Process) parseElement(root);
-        if (process != null) {
-            process.setWsdlDocuments(wsdlList);
+            Element root = bpelXML.getRootElement();
+            Process process = (Process) parseElement(root);
+            if (process != null) {
+                process.setWsdlDocuments(wsdlList);
+            }
+
+            return process;
+        } catch (IOException | JDOMException e) {
+            throw new BPELParseException(e.getMessage());
         }
-
-        return process;
     }
 
     private static org.bpel2bpmn.models.bpel.BPELObject parseElement(Element element) {
