@@ -3,6 +3,7 @@ package org.bpel2bpmn.utilities.parsers;
 import org.bpel2bpmn.models.bpel.BPELObject;
 import org.bpel2bpmn.models.bpel.Process;
 import org.bpel2bpmn.models.bpel.activities.Activity;
+import org.bpel2bpmn.models.bpel.activities.basic.Assign;
 import org.bpel2bpmn.models.bpel.activities.basic.Empty;
 import org.bpel2bpmn.models.bpel.activities.basic.Exit;
 import org.bpel2bpmn.models.bpel.activities.basic.Rethrow;
@@ -33,26 +34,20 @@ public class BPELParser {
 
     private static Logger LOG = LoggerFactory.getLogger(BPELParser.class);
 
-    public static Process parse(MultipartFile bpelFile, HashMap<String, Document> wsdlList) throws IOException {
+    public static Process parse(MultipartFile bpelFile, HashMap<String, Document> wsdlList) throws IOException, JDOMException {
         SAXBuilder builder = new SAXBuilder();
         InputStream inputStream;
 
-        try {
-            inputStream = bpelFile.getInputStream();
-            Document bpelXML = builder.build(inputStream);
+        inputStream = bpelFile.getInputStream();
+        Document bpelXML = builder.build(inputStream);
 
-            Element root = bpelXML.getRootElement();
-            Process process = (Process) parseElement(root);
-            if (process != null) {
-                process.setWsdlDocuments(wsdlList);
-            }
-            return process;
-        } catch (IOException | JDOMException e) {
-            LOG.error("Could not parse this BPEL file:");
-            LOG.error(e.getMessage());
+        Element root = bpelXML.getRootElement();
+        Process process = (Process) parseElement(root);
+        if (process != null) {
+            process.setWsdlDocuments(wsdlList);
         }
 
-        throw new IOException("Could not parse the given files.");
+        return process;
     }
 
     private static org.bpel2bpmn.models.bpel.BPELObject parseElement(Element element) {
@@ -64,6 +59,9 @@ public class BPELParser {
             case "documentation":
                 bpelObject = DocumentationParser.parse(element);
                 parseChildren = false;
+                break;
+            case Activity.ASSIGN:
+                bpelObject = BPELObjectParser.parse(element, Assign.class);
                 break;
             case Activity.EMPTY:
                 bpelObject = BPELObjectParser.parse(element, Empty.class);

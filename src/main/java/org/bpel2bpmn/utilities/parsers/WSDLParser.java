@@ -15,7 +15,7 @@ public class WSDLParser {
 
     private static Logger LOG = LoggerFactory.getLogger(WSDLParser.class);
 
-    public static HashMap<String, Document> parse(MultipartFile[] wsdlFiles) {
+    public static HashMap<String, Document> parse(MultipartFile[] wsdlFiles) throws IOException, JDOMException {
         SAXBuilder builder = new SAXBuilder();
         InputStream inputStream = null;
 
@@ -23,15 +23,10 @@ public class WSDLParser {
         Document wsdlDocument;
         String targetNamespace;
         for (MultipartFile wsdlFile : wsdlFiles) {
-            try {
-                inputStream = wsdlFile.getInputStream();
-                wsdlDocument = builder.build(inputStream);
-                targetNamespace = wsdlDocument.getRootElement().getAttributeValue("targetNamespace");
-                wsdlList.put(targetNamespace, wsdlDocument);
-            } catch (IOException | JDOMException e) {
-                LOG.error("Could not parse this WSDL file:");
-                LOG.error(e.getMessage());
-            }
+            inputStream = wsdlFile.getInputStream();
+            wsdlDocument = builder.build(inputStream);
+            targetNamespace = wsdlDocument.getRootElement().getAttributeValue("targetNamespace");
+            wsdlList.put(targetNamespace, wsdlDocument);
         }
 
         return wsdlList;

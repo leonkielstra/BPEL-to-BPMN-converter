@@ -1,5 +1,6 @@
 package org.bpel2bpmn.models.bpel.activities.structured;
 
+import org.bpel2bpmn.exceptions.BPELConversionException;
 import org.bpel2bpmn.models.bpel.BPELObject;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
 import org.camunda.bpm.model.bpmn.instance.*;
@@ -11,7 +12,7 @@ public class RepeatUntil extends LoopActivity {
     }
 
     @Override
-    public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) {
+    public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException {
         FlowNode subProcess;
 
         if (children.size() != 1 || !(children.get(0) instanceof Scope)) {

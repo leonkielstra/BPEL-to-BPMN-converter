@@ -1,5 +1,6 @@
 package org.bpel2bpmn.models.bpel;
 
+import org.bpel2bpmn.exceptions.BPELConversionException;
 import org.bpel2bpmn.models.bpel.activities.structured.Scope;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
@@ -18,6 +19,7 @@ public abstract class BPELObject {
     private HashMap<String, Document> wsdlDocuments;
 
     public void addChild(BPELObject child) throws UnsupportedOperationException {
+        LOG.error(this.getClass().toString());
         throw new UnsupportedOperationException("This element cannot hold any child elements.");
     }
 
@@ -51,7 +53,7 @@ public abstract class BPELObject {
      * @param from the BPMN element to which the newly mapped element should be connected
      * @return a BPMN element
      */
-    public abstract FlowNode toBPMN(BPMNBuilder builder, FlowNode from);
+    public abstract FlowNode toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException;
 
     /*
      * Getters & Setters
@@ -84,5 +86,6 @@ public abstract class BPELObject {
 
     public void setWsdlDocuments(HashMap<String, Document> wsdlDocuments) {
         this.wsdlDocuments = wsdlDocuments;
+        if (this.wsdlDocuments == null) this.wsdlDocuments = new HashMap<>();
     }
 }
