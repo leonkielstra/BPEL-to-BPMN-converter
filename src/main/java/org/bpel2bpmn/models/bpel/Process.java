@@ -1,5 +1,6 @@
 package org.bpel2bpmn.models.bpel;
 
+import org.bpel2bpmn.exceptions.BPELConversionException;
 import org.bpel2bpmn.models.bpel.generic.PartnerLink;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
 import org.bpel2bpmn.utilities.validation.ValidationResult;
@@ -71,7 +72,7 @@ public class Process extends BPELObject {
         return result;
     }
 
-    public BpmnModelInstance toBPMN() {
+    public BpmnModelInstance toBPMN() throws BPELConversionException {
         BPMNBuilder builder = new BPMNBuilder(this);
         Definitions definitions = builder.createDefinitions("bpel2bpmn");
         builder.createExecutableProcess(definitions, attributes.get("name"));

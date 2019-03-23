@@ -1,5 +1,6 @@
 package org.bpel2bpmn.models.bpel.activities.structured;
 
+import org.bpel2bpmn.exceptions.BPELConversionException;
 import org.bpel2bpmn.models.bpel.BPELObject;
 import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
@@ -22,7 +23,7 @@ public class Branch extends Activity {
     }
 
     @Override
-    public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) {
+    public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException {
         FlowNode lastElement = from;
         FlowNode currentElement;
 

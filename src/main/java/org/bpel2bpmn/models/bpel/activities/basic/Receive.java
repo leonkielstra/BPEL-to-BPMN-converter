@@ -1,5 +1,6 @@
 package org.bpel2bpmn.models.bpel.activities.basic;
 
+import org.bpel2bpmn.models.bpel.BPELObject;
 import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
 import org.bpel2bpmn.utilities.validation.ValidationResult;

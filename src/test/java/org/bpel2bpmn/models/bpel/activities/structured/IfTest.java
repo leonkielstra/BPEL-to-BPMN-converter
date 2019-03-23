@@ -1,6 +1,7 @@
 package org.bpel2bpmn.models.bpel.activities.structured;
 
 import factories.BPMNBuilderFactory;
+import org.bpel2bpmn.exceptions.BPELConversionException;
 import org.bpel2bpmn.models.bpel.activities.basic.Exit;
 import org.bpel2bpmn.models.bpel.activities.basic.Wait;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
@@ -25,7 +26,7 @@ public class IfTest {
     }
 
     @Test
-    public void toBPMN() {
+    public void toBPMN() throws BPELConversionException {
         FlowNode start = builder.createElement(StartEvent.class);
 
         Branch ifBranch = new Branch();
