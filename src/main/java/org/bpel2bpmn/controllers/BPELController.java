@@ -29,9 +29,9 @@ public class BPELController {
 
     private static Logger LOG = LoggerFactory.getLogger(BPELController.class);
 
-    private final String BASE_URL = "/BPEL";
+    private final String BASE_URL = "/bpel";
 
-    @RequestMapping(value = BASE_URL + "/toBPMN",
+    @RequestMapping(value = BASE_URL + "/convert-to-bpmn",
                     method = RequestMethod.POST,
                     consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity convertToBPMN(@RequestParam("bpel") MultipartFile bpelFile, @RequestParam("wsdl") MultipartFile[] wsdlFiles) {
