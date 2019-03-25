@@ -4,7 +4,7 @@
 The BPEL-to-BPMN converter is a tool to convert a BPEL document to a valid BPMN document. It consists of a RESTfull API, a BPEL parser and a converter. It is based on [BPEL 2.0](http://docs.oasis-open.org/wsbpel/2.0/OS/wsbpel-v2.0-OS.html) and [BPMN 2.0](https://www.omg.org/spec/BPMN).
 
 ## Current State
-Here is a list of BPEL elements and whether there are implemented or not.
+Here is a list of BPEL elements and whether they are implemented or not.
 - [ ] Assign (this isn't fully mappable)
 - [ ] CorrelationSets
 - [x] Empty
@@ -25,12 +25,12 @@ Here is a list of BPEL elements and whether there are implemented or not.
 - [ ] Scope
 - [x] Sequence
 - [x] Throw
-- [ ] Variables
+- [ ] Variables (this isn't fully mappable)
 - [x] Wait
 - [x] While
 
 ## Getting Started
-To setup this converter locally and getting ready to develop on the converter you'll need the following:
+To setup this converter locally and getting ready to develop on the converter you'll need to install the following:
 - [Java 9](https://www.oracle.com/java/java9.html)
 - [Maven](https://maven.apache.org/)
 
