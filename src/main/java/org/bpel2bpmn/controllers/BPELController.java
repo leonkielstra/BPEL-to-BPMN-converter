@@ -20,8 +20,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.HashMap;
 
 @RestController
@@ -33,7 +39,8 @@ public class BPELController {
 
     @RequestMapping(value = BASE_URL + "/convert-to-bpmn",
                     method = RequestMethod.POST,
-                    consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+                    consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+                    produces = "application/xml")
     public ResponseEntity convertToBPMN(@RequestParam("bpel") MultipartFile bpelFile, @RequestParam("wsdl") MultipartFile[] wsdlFiles) {
         HashMap<String, Document> wsdlList = null;
         Process bpelProcess = null;
@@ -50,19 +57,26 @@ public class BPELController {
             LOG.error(e.getMessage());
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error when parsing WSDL files; " + e.getMessage());
+                    .body(buildErrorXML("Error when parsing WSDL files; " + e.getMessage()));
         } catch (BPELParseException e) {
             LOG.error("BPEL parse error;");
             LOG.error(e.getMessage());
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error when parsing BPEL file; " + e.getMessage());
+                    .body(buildErrorXML("Error when parsing BPEL file; " + e.getMessage()));
         } catch (BPELConversionException e) {
             LOG.error("BPEL conversion error;");
             LOG.error(e.getMessage());
 
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                    .body("This BPEL file cannot be converted; " + e.getMessage());
+                    .body(buildErrorXML("This BPEL file cannot be converted; " + e.getMessage()));
         }
+    }
+
+    private String buildErrorXML(String message) {
+        String xmlString = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+
+        xmlString += "<message>" + message + "</message>";
+        return xmlString;
     }
 }
