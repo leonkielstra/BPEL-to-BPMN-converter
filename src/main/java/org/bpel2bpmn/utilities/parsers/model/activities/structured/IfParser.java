@@ -1,5 +1,6 @@
 package org.bpel2bpmn.utilities.parsers.model.activities.structured;
 
+import org.bpel2bpmn.exceptions.BPELParseException;
 import org.bpel2bpmn.models.bpel.activities.structured.Branch;
 import org.bpel2bpmn.models.bpel.activities.structured.If;
 import org.bpel2bpmn.utilities.parsers.BPELParser;
@@ -12,14 +13,14 @@ public class IfParser {
 
     private static Logger LOG = LoggerFactory.getLogger(IfParser.class);
 
-    public static If parse(Element element) throws IllegalStateException {
+    public static If parse(Element element) throws BPELParseException {
         If bpelIf = BPELObjectParser.parse(element, If.class);
         parseElements(element, bpelIf);
 
         return bpelIf;
     }
 
-    private static void parseElements(Element element, If bpelIf) throws IllegalStateException {
+    private static void parseElements(Element element, If bpelIf) throws BPELParseException {
         Branch branch;
 
         // Parse if branch
@@ -43,7 +44,7 @@ public class IfParser {
         }
     }
 
-    private static Branch parseBranch(Element element, If bpelIf, boolean hasCondition) throws IllegalStateException {
+    private static Branch parseBranch(Element element, If bpelIf, boolean hasCondition) throws BPELParseException {
         Branch branch = new Branch();
         Element condition = null;
 
@@ -57,7 +58,7 @@ public class IfParser {
 
         if (hasCondition) {
             if (condition == null) {
-                throw new IllegalStateException("Expected a condition for this if-elseif-else branch.");
+                throw new BPELParseException("Expected a condition for this if-elseif-else branch.");
             }
 
             branch.setCondition(condition.getValue());

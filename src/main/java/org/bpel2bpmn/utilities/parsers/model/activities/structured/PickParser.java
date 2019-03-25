@@ -1,5 +1,6 @@
 package org.bpel2bpmn.utilities.parsers.model.activities.structured;
 
+import org.bpel2bpmn.exceptions.BPELParseException;
 import org.bpel2bpmn.models.bpel.activities.basic.Wait;
 import org.bpel2bpmn.models.bpel.activities.structured.OnAlarm;
 import org.bpel2bpmn.models.bpel.activities.structured.OnMessage;
@@ -10,14 +11,14 @@ import org.jdom.Element;
 
 public class PickParser {
 
-    public static Pick parse(Element element) {
+    public static Pick parse(Element element) throws BPELParseException {
         Pick pick = new Pick();
         parseElements(pick, element);
 
         return pick;
     }
 
-    private static void parseElements(Pick pick, Element element) {
+    private static void parseElements(Pick pick, Element element) throws BPELParseException {
         for (Object object : element.getChildren()) {
             Element child = (Element) object;
 
@@ -34,7 +35,7 @@ public class PickParser {
         }
     }
 
-    private static OnMessage parseOnMessage(Element element) {
+    private static OnMessage parseOnMessage(Element element) throws BPELParseException {
         OnMessage event = new OnMessage();
 
         // TODO: Implement message event (probably Receive).
@@ -44,7 +45,7 @@ public class PickParser {
         return event;
     }
 
-    private static OnAlarm parseOnAlarm(Element element) {
+    private static OnAlarm parseOnAlarm(Element element) throws BPELParseException {
         OnAlarm event = new OnAlarm();
 
         Wait wait = WaitParser.parse(element);
