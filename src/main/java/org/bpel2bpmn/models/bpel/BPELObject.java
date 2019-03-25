@@ -19,8 +19,7 @@ public abstract class BPELObject {
     private HashMap<String, Document> wsdlDocuments;
 
     public void addChild(BPELObject child) throws UnsupportedOperationException {
-        LOG.error(this.getClass().toString());
-        throw new UnsupportedOperationException("This element cannot hold any child elements.");
+        throw new UnsupportedOperationException(this.getClass().toString() + "; This element cannot hold any child elements.");
     }
 
     public void addAttribute(String key, String value) {
