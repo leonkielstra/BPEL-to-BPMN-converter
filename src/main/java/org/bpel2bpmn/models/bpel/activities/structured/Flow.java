@@ -10,6 +10,7 @@ import org.camunda.bpm.model.bpmn.instance.ParallelGateway;
 import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Flow extends Activity {
 
@@ -28,7 +29,7 @@ public class Flow extends Activity {
 
         builder.createSequenceFlow(from, beforeGateway);
 
-        // No links, TODO: Take into account JoinSupressionFail
+        // No links
         if (links.size() < 1) {
             for (BPELObject child : children) {
                 // TODO: Check for documentation
@@ -36,19 +37,33 @@ public class Flow extends Activity {
                 FlowNode bpmnOpbject = child.toBPMN(builder, beforeGateway);
                 builder.createSequenceFlow(bpmnOpbject, afterGateway);
             }
+        } else {
+            // Create sequenceflows for all links to be connected to sources and targets later on.
+            HashMap<String, SequenceFlow> targets = new HashMap<>();
+            SequenceFlow flow;
+            for (String link : links) {
+                flow = builder.createElement(SequenceFlow.class);
+                flow.setName(link);
+                targets.put(link, flow);
+            }
 
-            return afterGateway;
+            for (BPELObject child : children) {
+                FlowNode bpmnOpbject = child.toBPMN(builder, beforeGateway);
+
+                for (String source : child.getSources()) {
+                    flow = targets.get(source);
+                    if (flow != null) flow.setSource(bpmnOpbject);
+                }
+
+                for (String target : child.getTargets()) {
+                    flow = targets.get(target);
+                    if (flow != null) flow.setTarget(bpmnOpbject);
+                }
+            }
         }
 
-        // Create sequenceflows for all links to be connected to sources and targets later on.
-        ArrayList<SequenceFlow> targets = new ArrayList<>();
-//        for (String link : links) {
-//            SequenceFlow flow = builder.createElement(SequenceFlow.class);
-//            flow.setName(link);
-//            targets.add(flow);
-//        }
 
-        // TODO; Implement links
+        // TODO: Take into account JoinSupressionFail
 
         return from;
     }
