@@ -1,5 +1,6 @@
 package org.bpel2bpmn.utilities.parsers.model.activities.structured;
 
+import org.bpel2bpmn.exceptions.BPELParseException;
 import org.bpel2bpmn.models.bpel.activities.structured.LoopActivity;
 import org.bpel2bpmn.utilities.parsers.BPELParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.BPELObjectParser;
@@ -7,7 +8,7 @@ import org.jdom.Element;
 
 public class LoopParser {
 
-    public static <T extends LoopActivity> T parse(Element element, Class<T> loopClass) {
+    public static <T extends LoopActivity> T parse(Element element, Class<T> loopClass) throws BPELParseException {
         T loopInstance = BPELObjectParser.parse(element, loopClass);
 
         Element condition = null;

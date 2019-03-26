@@ -8,6 +8,7 @@ import org.jdom.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class BPELObject {
@@ -15,16 +16,32 @@ public abstract class BPELObject {
     private static Logger LOG = LoggerFactory.getLogger(BPELObject.class);
 
     protected BPELObject parent;
-    protected HashMap<String, String> attributes = new HashMap<>();
+    protected HashMap<String, String> attributes;
+    protected ArrayList<String> sources;
+    protected ArrayList<String> targets;
+
     private HashMap<String, Document> wsdlDocuments;
 
+    public BPELObject() {
+        attributes = new HashMap<>();
+        sources = new ArrayList<>();
+        targets = new ArrayList<>();
+    }
+
     public void addChild(BPELObject child) throws UnsupportedOperationException {
-        LOG.error(this.getClass().toString());
-        throw new UnsupportedOperationException("This element cannot hold any child elements.");
+        throw new UnsupportedOperationException(this.getClass().toString() + "; This element cannot hold any child elements.");
     }
 
     public void addAttribute(String key, String value) {
         attributes.put(key, value);
+    }
+
+    public void addSource(String source) {
+        sources.add(source);
+    }
+
+    public void addTarget(String target) {
+        targets.add(target);
     }
 
     /**
@@ -87,5 +104,13 @@ public abstract class BPELObject {
     public void setWsdlDocuments(HashMap<String, Document> wsdlDocuments) {
         this.wsdlDocuments = wsdlDocuments;
         if (this.wsdlDocuments == null) this.wsdlDocuments = new HashMap<>();
+    }
+
+    public ArrayList<String> getSources() {
+        return sources;
+    }
+
+    public ArrayList<String> getTargets() {
+        return targets;
     }
 }
