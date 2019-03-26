@@ -1,5 +1,6 @@
 package org.bpel2bpmn.utilities.parsers.model.activities.basic;
 
+import org.bpel2bpmn.exceptions.BPELParseException;
 import org.bpel2bpmn.models.bpel.activities.basic.Wait;
 import org.bpel2bpmn.utilities.parsers.model.activities.BPELObjectParser;
 import org.jdom.Element;
@@ -14,14 +15,14 @@ public class WaitParser {
 
     private final static String EXP_LANGUAGE = "expressionLanguage";
 
-    public static Wait parse(Element element) throws IllegalStateException {
+    public static Wait parse(Element element) throws BPELParseException {
         Wait wait = BPELObjectParser.parse(element, Wait.class);
         parseElements(element, wait);
 
         return wait;
     }
 
-    private static void parseElements(Element element, Wait wait) throws IllegalStateException {
+    private static void parseElements(Element element, Wait wait) throws BPELParseException {
         List children = element.getChildren();
         for (Object child : children) {
             Element childElement = (Element) child;
@@ -45,6 +46,6 @@ public class WaitParser {
             }
         }
 
-        throw new IllegalStateException("The Wait activity should have an until or a for element");
+        throw new BPELParseException("The Wait activity should have an 'until' or a 'for' element.");
     }
 }

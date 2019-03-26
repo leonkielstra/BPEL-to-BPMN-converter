@@ -1,5 +1,6 @@
 package org.bpel2bpmn.utilities.parsers.model.activities;
 
+import org.bpel2bpmn.exceptions.BPELParseException;
 import org.bpel2bpmn.models.bpel.BPELObject;
 import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.jdom.Attribute;
@@ -24,10 +25,12 @@ public class BPELObjectParser {
      * @param <T>
      * @return parsed activity
      */
-    public static <T extends BPELObject> T parse(Element element, Class<T> BPELObjectClass) {
+    public static <T extends BPELObject> T parse(Element element, Class<T> BPELObjectClass) throws BPELParseException {
         try {
             T activity = BPELObjectClass.getDeclaredConstructor().newInstance();
             parseAttributes(activity, element);
+            parseSources(activity, element);
+            parseTargets(activity, element);
 
             return activity;
         } catch (InstantiationException e) {
@@ -54,6 +57,38 @@ public class BPELObjectParser {
             if (attribute != null) {
                 bpelObject.addAttribute(attributeName, attribute.getValue());
             }
+        }
+    }
+
+    private static <T extends BPELObject> void parseSources(T bpelObject, Element element) throws BPELParseException {
+        Element sourcesNode = element.getChild("sources", element.getNamespace());
+        if (sourcesNode == null) { return; }
+
+        for (Object child : sourcesNode.getChildren()) {
+            Element sourceNode = (Element) child;
+            String source = sourceNode.getAttributeValue("linkName");
+
+            if (source == null || source.equals("")) {
+                throw new BPELParseException("A source node should contain a 'linkName' attribute.");
+            }
+
+            bpelObject.addSource(source);
+        }
+    }
+
+    private static <T extends BPELObject> void parseTargets(T bpelObject, Element element) throws BPELParseException {
+        Element targetsNode = element.getChild("targets");
+        if (targetsNode == null) return;
+
+        for (Object child : targetsNode.getChildren()) {
+            Element targetNode = (Element) child;
+            String target = targetNode.getAttributeValue("linkName");
+
+            if (target == null || target.equals("")) {
+                throw new BPELParseException("A target node should contain a 'linkName' attribute.");
+            }
+
+            bpelObject.addTarget(target);
         }
     }
 }

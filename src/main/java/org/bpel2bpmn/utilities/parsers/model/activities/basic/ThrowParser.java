@@ -1,5 +1,6 @@
 package org.bpel2bpmn.utilities.parsers.model.activities.basic;
 
+import org.bpel2bpmn.exceptions.BPELParseException;
 import org.bpel2bpmn.models.bpel.activities.basic.Throw;
 import org.bpel2bpmn.utilities.parsers.model.activities.BPELObjectParser;
 import org.bpel2bpmn.utilities.validation.ValidationResult;
@@ -8,13 +9,13 @@ import org.jdom.Element;
 
 public class ThrowParser {
 
-    public static Throw parse(Element element) throws IllegalStateException {
+    public static Throw parse(Element element) throws BPELParseException {
         Throw throwInstance = BPELObjectParser.parse(element, Throw.class);
         parseAttributes(throwInstance, element);
 
         ValidationResult validationResult = throwInstance.validate();
         if (!validationResult.isValid()) {
-            throw new IllegalStateException(validationResult.getMessage());
+            throw new BPELParseException(validationResult.getMessage());
         }
 
         return throwInstance;
