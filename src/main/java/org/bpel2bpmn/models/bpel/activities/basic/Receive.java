@@ -8,7 +8,6 @@ import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.camunda.bpm.model.bpmn.instance.IntermediateCatchEvent;
 import org.camunda.bpm.model.bpmn.instance.MessageEventDefinition;
 
-// TODO: implement
 public class Receive extends Activity {
 
     public static final String[] ATTRIBUTES = {
