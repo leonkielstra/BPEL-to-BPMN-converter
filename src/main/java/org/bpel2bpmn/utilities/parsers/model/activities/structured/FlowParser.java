@@ -6,7 +6,7 @@ import org.bpel2bpmn.utilities.parsers.BPELParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.BPELObjectParser;
 import org.jdom.Element;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;;
+import org.slf4j.LoggerFactory;
 
 public class FlowParser {
 

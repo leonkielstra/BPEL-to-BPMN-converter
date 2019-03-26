@@ -32,13 +32,14 @@ public class Flow extends Activity {
         // No links
         if (links.size() < 1) {
             for (BPELObject child : children) {
-                // TODO: Check for documentation
-
                 FlowNode bpmnOpbject = child.toBPMN(builder, beforeGateway);
-                builder.createSequenceFlow(bpmnOpbject, afterGateway);
+
+                if (!bpmnOpbject.equals(beforeGateway)) {
+                    builder.createSequenceFlow(bpmnOpbject, afterGateway);
+                }
             }
         } else {
-            // Create sequenceflows for all links to be connected to sources and targets later on.
+            // Create sequence flows for all links to be connected to sources and targets later on.
             HashMap<String, SequenceFlow> targets = new HashMap<>();
             SequenceFlow flow;
             for (String link : links) {
@@ -60,12 +61,28 @@ public class Flow extends Activity {
                     if (flow != null) flow.setTarget(bpmnOpbject);
                 }
             }
+
+            // Check if sequence flows are connected
+            for (SequenceFlow linkFlow : targets.values()) {
+                if (linkFlow.getSource() == null) {
+                    throw new BPELConversionException("The link with name '"    +
+                                                      linkFlow.getName()        +
+                                                      "' has no source activity.",
+                                                      "flow");
+                }
+                if (linkFlow.getTarget() == null) {
+                    throw new BPELConversionException("The link with name '"    +
+                                                      linkFlow.getName()        +
+                                                      "' has no target activity.",
+                                                      "flow");
+                }
+            }
         }
 
 
         // TODO: Take into account JoinSupressionFail
 
-        return from;
+        return afterGateway;
     }
 
     public void addChild(BPELObject child) {

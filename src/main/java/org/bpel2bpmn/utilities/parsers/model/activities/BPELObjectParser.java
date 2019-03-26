@@ -22,7 +22,7 @@ public class BPELObjectParser {
      *
      * @param element XML element to be parsed
      * @param BPELObjectClass The class to which it should be parsed
-     * @param <T>
+     * @param <T> The BPELObject subclass to be returned
      * @return parsed activity
      */
     public static <T extends BPELObject> T parse(Element element, Class<T> BPELObjectClass) throws BPELParseException {
@@ -49,7 +49,7 @@ public class BPELObjectParser {
      *
      * @param bpelObject to add the attributes to
      * @param element to extract the attributes from
-     * @param <T>
+     * @param <T> The BPELObject subclass to be returned
      */
     private static <T extends BPELObject> void parseAttributes(T bpelObject, Element element) {
         for (String attributeName : Activity.STANDARD_ATTRIBUTES) {

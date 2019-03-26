@@ -8,7 +8,6 @@ import org.bpel2bpmn.models.bpel.activities.basic.Assign;
 import org.bpel2bpmn.models.bpel.activities.basic.Empty;
 import org.bpel2bpmn.models.bpel.activities.basic.Exit;
 import org.bpel2bpmn.models.bpel.activities.basic.Rethrow;
-import org.bpel2bpmn.models.bpel.activities.structured.Flow;
 import org.bpel2bpmn.models.bpel.activities.structured.Sequence;
 import org.bpel2bpmn.models.bpel.activities.structured.While;
 import org.bpel2bpmn.utilities.parsers.model.ProcessParser;
@@ -21,6 +20,7 @@ import org.bpel2bpmn.utilities.parsers.model.activities.structured.IfParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.structured.LoopParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.structured.PickParser;
 import org.bpel2bpmn.utilities.parsers.model.generic.DocumentationParser;
+import org.bpel2bpmn.utilities.parsers.model.generic.ImportParser;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -57,6 +57,9 @@ public class BPELParser {
         }
     }
 
+    public BPELParser() {
+    }
+
     private static org.bpel2bpmn.models.bpel.BPELObject parseElement(Element element) throws BPELParseException {
         LOG.debug("Parsing element: " + element.getName());
         org.bpel2bpmn.models.bpel.BPELObject bpelObject;
@@ -84,10 +87,10 @@ public class BPELParser {
                 bpelObject = IfParser.parse(element);
                 parseChildren = false;
                 break;
-//            case "import":
-//                bpelObject = ImportParser.parse(element);
-//                parseChildren = false;
-//                break;
+            case "import":
+                bpelObject = ImportParser.parse(element);
+                parseChildren = false;
+                break;
             case Activity.PICK:
                 bpelObject = PickParser.parse(element);
                 parseChildren = false;
