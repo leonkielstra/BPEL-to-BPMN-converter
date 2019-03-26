@@ -14,7 +14,7 @@ Here is a list of BPEL elements and whether they are implemented or not.
 - [ ] Flow
 - [ ] ForEach
 - [x] If
-- [ ] Import (implemented but doesn't work due to conflicts between SAXParser and BPEL specification)
+- [x] Import
 - [ ] Invoke
 - [x] PartnerLink (without WSDL interfaces + messages)
 - [ ] Pick

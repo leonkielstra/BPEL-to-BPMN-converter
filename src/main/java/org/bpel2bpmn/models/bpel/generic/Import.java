@@ -25,10 +25,11 @@ public class Import extends BPELObject {
     @Override
     public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) {
         Definitions definitions = builder.getModelInstance().getDefinitions();
-        org.camunda.bpm.model.bpmn.instance.Import importInstance = builder.createElement(definitions, ImportImpl.class);
+        org.camunda.bpm.model.bpmn.instance.Import importInstance = builder.createElement(definitions, org.camunda.bpm.model.bpmn.instance.Import.class);
 
         importInstance.setImportType(getImportType());
-        importInstance.setImportType(getNamespace());
+        importInstance.setNamespace(getNamespace());
+        importInstance.setLocation(getLocation());
 
         if (getLocation() != null) {
             importInstance.setLocation(getLocation());
@@ -43,6 +44,11 @@ public class Import extends BPELObject {
         if (attributes.get("namespace") == null) {
             result.invalidate();
             result.addMissingAttribute("namespace");
+        }
+
+        if (attributes.get("location") == null) {
+            result.invalidate();
+            result.addMissingAttribute("location");
         }
 
         if (attributes.get("importType") == null) {

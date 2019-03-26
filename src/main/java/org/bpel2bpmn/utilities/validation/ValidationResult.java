@@ -28,10 +28,16 @@ public class ValidationResult {
     public String getMessage() {
         StringBuilder builder = new StringBuilder();
         builder.append(subject);
-        builder.append(" is invalid; the following attributes are missing: ");
-        for (String attribute : missingAttributes) {
+        builder.append(" is invalid; missing the following attribute(s): ");
+
+        String attribute;
+        for (int i=0; i < missingAttributes.size(); i++) {
+            attribute = missingAttributes.get(i);
             builder.append(attribute);
-            builder.append(", ");
+
+            if (i < missingAttributes.size() - 1) {
+                builder.append(", ");
+            }
         }
 
         return builder.toString();
