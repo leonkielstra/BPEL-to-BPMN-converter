@@ -24,6 +24,19 @@ public class Invoke extends Activity {
 
     @Override
     public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) {
+        FlowNode lastNode = createSendTask(builder);
+
+        // Map for synchronous invoke
+        if (isSynchronous()) {
+            lastNode = createReceiveTask(builder, (SendTask) lastNode);
+        }
+
+        // TODO: Implement fault handlers
+
+        return lastNode;
+    }
+
+    private SendTask createSendTask(BPMNBuilder builder) {
         // Create send task
         SendTask sendTask = builder.createElement(SendTask.class);
         Operation operation = builder.createElement(Operation.class);
@@ -47,35 +60,29 @@ public class Invoke extends Activity {
         // Connect send task to process with partnerLink
         builder.createMessageFlow(sendTask, attributes.get("partnerLink"), false);
 
-        // Temporarily store last created node
-        FlowNode lastNode = sendTask;
+        return sendTask;
+    }
 
-        // Map for synchronous invoke
-        if (isSynchronous()) {
-            ReceiveTask receiveTask = builder.createElement(ReceiveTask.class);
-            receiveTask.setOperation(operation);
-            property = builder.createElement(receiveTask, Property.class);
+    private ReceiveTask createReceiveTask(BPMNBuilder builder, SendTask sendTask) {
+        ReceiveTask receiveTask = builder.createElement(ReceiveTask.class);
+        receiveTask.setOperation(sendTask.getOperation());
+        Property property = builder.createElement(receiveTask, Property.class);
 
-            DataObjectReference outputReference = builder.findOrCreateDataObject(getOutputVariable());
-            DataOutputAssociation outputAssociation = builder.createElement(receiveTask, DataOutputAssociation.class);
+        DataObjectReference outputReference = builder.findOrCreateDataObject(getOutputVariable());
+        DataOutputAssociation outputAssociation = builder.createElement(receiveTask, DataOutputAssociation.class);
 
-            sourceRef = builder.createElement(outputAssociation, SourceRef.class);
-            sourceRef.setTextContent(property.getId());
-            targetRef = builder.createElement(outputAssociation, TargetRef.class);
-            targetRef.setTextContent(outputAssociation.getId());
+        SourceRef sourceRef = builder.createElement(outputAssociation, SourceRef.class);
+        sourceRef.setTextContent(property.getId());
+        TargetRef targetRef = builder.createElement(outputAssociation, TargetRef.class);
+        targetRef.setTextContent(outputAssociation.getId());
 
-            // Connect receive task to process with partnerLink
-            builder.createMessageFlow(receiveTask, attributes.get("partnerLink"), true);
+        // Connect receive task to process with partnerLink
+        builder.createMessageFlow(receiveTask, attributes.get("partnerLink"), true);
 
-            // Connect both message tasks
-            builder.createSequenceFlow(sendTask, receiveTask);
+        // Connect both message tasks
+        builder.createSequenceFlow(sendTask, receiveTask);
 
-            lastNode = receiveTask;
-        }
-
-        // TODO: Implement fault handlers
-
-        return lastNode;
+        return receiveTask;
     }
 
     public ValidationResult validate() {
