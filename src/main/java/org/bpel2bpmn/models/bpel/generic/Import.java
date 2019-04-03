@@ -3,7 +3,6 @@ package org.bpel2bpmn.models.bpel.generic;
 import org.bpel2bpmn.models.bpel.BPELObject;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
 import org.bpel2bpmn.utilities.validation.ValidationResult;
-import org.camunda.bpm.model.bpmn.impl.instance.ImportImpl;
 import org.camunda.bpm.model.bpmn.instance.Definitions;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 
