@@ -15,8 +15,8 @@ Here is a list of BPEL elements and whether they are implemented or not.
 - [ ] ForEach
 - [x] If
 - [x] Import
-- [ ] Invoke (this isn't fully mappable)
-- [x] PartnerLink (without WSDL interfaces + messages)
+- [x] Invoke (implemented without operation reference and fault handlers)
+- [x] PartnerLink (implemented without WSDL interfaces + messages)
 - [ ] Pick
 - [x] Receive
 - [x] RepeatUntil (this needs a mapping for expression languages)
