@@ -3,6 +3,7 @@ package org.bpel2bpmn.models.bpel.activities.basic;
 import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
 import org.bpel2bpmn.utilities.validation.ValidationResult;
+import org.camunda.bpm.model.bpmn.impl.instance.OperationImpl;
 import org.camunda.bpm.model.bpmn.impl.instance.SourceRef;
 import org.camunda.bpm.model.bpmn.impl.instance.Target;
 import org.camunda.bpm.model.bpmn.impl.instance.TargetRef;
@@ -31,7 +32,7 @@ public class Invoke extends Activity {
             lastNode = createReceiveTask(builder, (SendTask) lastNode);
         }
 
-        // TODO: Implement fault handlers
+        // Note: Fault handlers are not implemented. Implementation should be placed around here.
 
         return lastNode;
     }
@@ -39,9 +40,8 @@ public class Invoke extends Activity {
     private SendTask createSendTask(BPMNBuilder builder) {
         // Create send task
         SendTask sendTask = builder.createElement(SendTask.class);
-        Operation operation = builder.createElement(Operation.class);
-        operation.setName(attributes.get("operation"));
-        sendTask.setOperation(operation);
+            // Note: operation should be added to the send task, but this would invalidate the BPMN model
+
         Property property = builder.createElement(sendTask, Property.class);
 
         // Connect send task to input data object
@@ -65,7 +65,8 @@ public class Invoke extends Activity {
 
     private ReceiveTask createReceiveTask(BPMNBuilder builder, SendTask sendTask) {
         ReceiveTask receiveTask = builder.createElement(ReceiveTask.class);
-        receiveTask.setOperation(sendTask.getOperation());
+            // Note: operation should be added to the receive task, but this would invalidate the BPMN model
+
         Property property = builder.createElement(receiveTask, Property.class);
 
         DataObjectReference outputReference = builder.findOrCreateDataObject(getOutputVariable());
@@ -74,7 +75,7 @@ public class Invoke extends Activity {
         SourceRef sourceRef = builder.createElement(outputAssociation, SourceRef.class);
         sourceRef.setTextContent(property.getId());
         TargetRef targetRef = builder.createElement(outputAssociation, TargetRef.class);
-        targetRef.setTextContent(outputAssociation.getId());
+        targetRef.setTextContent(outputReference.getId());
 
         // Connect receive task to process with partnerLink
         builder.createMessageFlow(receiveTask, attributes.get("partnerLink"), true);
