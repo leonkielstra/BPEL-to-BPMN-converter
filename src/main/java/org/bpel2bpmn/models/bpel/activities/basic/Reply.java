@@ -4,6 +4,8 @@ import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
 import org.bpel2bpmn.utilities.validation.ValidationResult;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
+import org.camunda.bpm.model.bpmn.instance.IntermediateThrowEvent;
+import org.camunda.bpm.model.bpmn.instance.MessageEventDefinition;
 
 public class Reply extends Activity {
 
@@ -22,7 +24,12 @@ public class Reply extends Activity {
 
     @Override
     public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) {
-        return null;
+        IntermediateThrowEvent messageEvent = builder.createElement(IntermediateThrowEvent.class);
+        builder.createElement(messageEvent, MessageEventDefinition.class);
+        builder.createMessageFlow(messageEvent, attributes.get("partnerLink"), false);
+            // Note: operation should be added to the message event, but this would invalidate the BPMN model
+
+        return messageEvent;
     }
 
     public ValidationResult validate() {
