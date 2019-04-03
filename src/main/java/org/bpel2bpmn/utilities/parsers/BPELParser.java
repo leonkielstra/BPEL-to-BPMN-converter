@@ -4,14 +4,12 @@ import org.bpel2bpmn.exceptions.BPELParseException;
 import org.bpel2bpmn.models.bpel.BPELObject;
 import org.bpel2bpmn.models.bpel.Process;
 import org.bpel2bpmn.models.bpel.activities.Activity;
-import org.bpel2bpmn.models.bpel.activities.basic.Assign;
-import org.bpel2bpmn.models.bpel.activities.basic.Empty;
-import org.bpel2bpmn.models.bpel.activities.basic.Exit;
-import org.bpel2bpmn.models.bpel.activities.basic.Rethrow;
+import org.bpel2bpmn.models.bpel.activities.basic.*;
 import org.bpel2bpmn.models.bpel.activities.structured.Sequence;
 import org.bpel2bpmn.models.bpel.activities.structured.While;
 import org.bpel2bpmn.utilities.parsers.model.ProcessParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.BPELObjectParser;
+import org.bpel2bpmn.utilities.parsers.model.activities.basic.InvokeParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.basic.ReceiveParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.basic.ThrowParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.basic.WaitParser;
@@ -85,6 +83,10 @@ public class BPELParser {
                 break;
             case Activity.IF:
                 bpelObject = IfParser.parse(element);
+                parseChildren = false;
+                break;
+            case Activity.INVOKE:
+                bpelObject = InvokeParser.parse(element);
                 parseChildren = false;
                 break;
             case "import":

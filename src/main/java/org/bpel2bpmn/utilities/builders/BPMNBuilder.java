@@ -6,6 +6,8 @@ import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.*;
 import org.camunda.bpm.model.bpmn.instance.Process;
 
+import java.util.Collection;
+
 public class BPMNBuilder {
 
     private static final String BPMN_NAMESPACE = "http://bpmn.io/schema/bpmn";
@@ -154,6 +156,42 @@ public class BPMNBuilder {
                 }
             }
         }
+    }
+
+    /**
+     * Looks for the DataObject for the given name in the most enclosing scope
+     * and creates a new one if it can't be found.
+     *
+     * @param name Name of the input variable that maps to the data object
+     * @return Found or new DataObject.
+     */
+    public DataObjectReference findOrCreateDataObject(String name) {
+        BpmnModelElementInstance current = currentScope;
+
+        while (true) {
+            if (name == null) break;
+
+            Collection<DataObjectReference> references = current.getChildElementsByType(DataObjectReference.class);
+            for (DataObjectReference reference : references) {
+                DataObject dataObject = reference.getDataObject();
+                if (dataObject.getName().equals(name)) {
+                    return reference;
+                }
+            }
+
+            if (current.equals(currentScope)) break;
+
+            current = current.getScope();
+        }
+
+        // Data Object not found, new one is created in current scope.
+        DataObject dataObject = createElement(DataObject.class);
+        dataObject.setName(name);
+
+        DataObjectReference objectReference = createElement(DataObjectReference.class);
+        objectReference.setDataObject(dataObject);
+
+        return objectReference;
     }
 
     /*
