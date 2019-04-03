@@ -20,7 +20,7 @@ Here is a list of BPEL elements and whether they are implemented or not.
 - [ ] Pick
 - [x] Receive
 - [x] RepeatUntil (this needs a mapping for expression languages)
-- [ ] Reply
+- [x] Reply (implemented without operation reference)
 - [x] Rethrow
 - [ ] Scope
 - [x] Sequence
