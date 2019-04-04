@@ -26,23 +26,22 @@ public class If extends Activity {
     public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException {
         // Gateway to diverge incoming branch
         ExclusiveGateway divergeGateway = builder.createElement(ExclusiveGateway.class);
-        builder.createSequenceFlow(from, divergeGateway);
 
         // Gateway to join branches
         ExclusiveGateway joinGateway = builder.createElement(ExclusiveGateway.class);
 
         // Map branches
         FlowNode node = ifBranch.toBPMN(builder, divergeGateway).getEndNode();
-        mapSequenceFlow(builder, node, joinGateway);
+        if (node != null) mapSequenceFlow(builder, node, joinGateway);
 
         for (Branch elseIfBranch : elseIfBranches) {
             node = elseIfBranch.toBPMN(builder, divergeGateway).getEndNode();
-            mapSequenceFlow(builder, node, joinGateway);
+            if (node != null) mapSequenceFlow(builder, node, joinGateway);
         }
 
         if (elseBranch != null) {
             node = elseBranch.toBPMN(builder, divergeGateway).getEndNode();
-            mapSequenceFlow(builder, node, joinGateway);
+            if (node != null) mapSequenceFlow(builder, node, joinGateway);
             // The mapping describes a 'default' sequence flow. This is purely for notation purposes and will be ignored.
         }
 

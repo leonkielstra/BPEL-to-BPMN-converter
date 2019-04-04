@@ -25,18 +25,20 @@ public class Branch extends Activity {
 
     @Override
     public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException {
-        FlowNode lastElement = from;
         MappedPair result = new MappedPair();
+        FlowNode lastElement = null;
 
         boolean isFirstChild = true;
         for (BPELObject child : children) {
             builder.prepareConditionalSequenceFlow(condition);
 
             MappedPair mapping = child.toBPMN(builder, lastElement);
-            builder.createSequenceFlow(lastElement, mapping.getStartNode());
-            lastElement = mapping.getEndNode();
+            if (!mapping.isEmpty()) {
+                builder.createSequenceFlow(lastElement, mapping.getStartNode());
+                lastElement = mapping.getEndNode();
+            }
 
-            if (isFirstChild) {
+            if (isFirstChild && !mapping.isEmpty()) {
                 result.setStartNode(mapping.getStartNode());
                 isFirstChild = false;
             }
