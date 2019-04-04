@@ -20,17 +20,25 @@ public class Sequence extends Activity {
 
     @Override
     public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException {
-        FlowNode lastElement = from;
         MappedPair result = new MappedPair();
+        FlowNode lastElement = null;
 
         boolean isFirstChild = true;
         for (BPELObject child : children) {
+            // Map child activity to bpmm
             MappedPair mapping = child.toBPMN(builder, lastElement);
-            if (!mapping.isEmpty()) {
+
+            // If a start node is defined and mapping is returned, connect them.
+            if (lastElement != null && !mapping.isEmpty()) {
                 builder.createSequenceFlow(lastElement, mapping.getStartNode());
+            }
+
+            // Set end node of mapping as next element to connect to
+            if (!mapping.isEmpty()) {
                 lastElement = mapping.getEndNode();
             }
 
+            // Set start node of this sequence
             if (isFirstChild) {
                 result.setStartNode(mapping.getStartNode());
                 isFirstChild = false;
