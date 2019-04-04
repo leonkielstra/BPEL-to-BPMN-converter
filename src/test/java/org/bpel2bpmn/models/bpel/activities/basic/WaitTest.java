@@ -2,6 +2,7 @@ package org.bpel2bpmn.models.bpel.activities.basic;
 
 import factories.BPMNBuilderFactory;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.structures.MappedPair;
 import org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl;
 import org.camunda.bpm.model.bpmn.impl.instance.TimerEventDefinitionImpl;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
@@ -31,10 +32,12 @@ public class WaitTest {
         wait.setTimer(true);
         wait.setTimeExpression(timeExpression);
 
-        FlowNode bpmn = wait.toBPMN(builder, start);
-        TimerEventDefinitionImpl timer = (TimerEventDefinitionImpl) bpmn.getChildElementsByType(TimerEventDefinition.class).toArray()[0];
+        MappedPair bpmn = wait.toBPMN(builder, start);
+        TimerEventDefinitionImpl timer = (TimerEventDefinitionImpl) bpmn.getStartNode()
+                                                                        .getChildElementsByType(TimerEventDefinition.class)
+                                                                        .toArray()[0];
 
-        assertEquals(IntermediateCatchEventImpl.class, bpmn.getClass());
+        assertEquals(IntermediateCatchEventImpl.class, bpmn.getStartNode().getClass());
         assertEquals(timeExpression, timer.getTimeDuration().getTextContent());
     }
 
@@ -44,7 +47,7 @@ public class WaitTest {
         wait.setTimer(false);
         wait.setTimeExpression(timeExpression);
 
-        FlowNode bpmn = wait.toBPMN(builder, start);
+        FlowNode bpmn = wait.toBPMN(builder, start).getStartNode();
         TimerEventDefinitionImpl timer = (TimerEventDefinitionImpl) bpmn.getChildElementsByType(TimerEventDefinition.class).toArray()[0];
 
         assertEquals(IntermediateCatchEventImpl.class, bpmn.getClass());

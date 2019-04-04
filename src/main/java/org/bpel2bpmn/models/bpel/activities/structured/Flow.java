@@ -4,6 +4,7 @@ import org.bpel2bpmn.exceptions.BPELConversionException;
 import org.bpel2bpmn.models.bpel.BPELObject;
 import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.structures.MappedPair;
 import org.camunda.bpm.model.bpmn.instance.ComplexGateway;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.camunda.bpm.model.bpmn.instance.ParallelGateway;
@@ -23,7 +24,7 @@ public class Flow extends Activity {
     }
 
     @Override
-    public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException {
+    public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException {
         ComplexGateway afterGateway = builder.createElement(ComplexGateway.class);
         ParallelGateway beforeGateway = builder.createElement(ParallelGateway.class);
 
@@ -32,10 +33,10 @@ public class Flow extends Activity {
         // No links
         if (links.size() < 1) {
             for (BPELObject child : children) {
-                FlowNode bpmnOpbject = child.toBPMN(builder, beforeGateway);
+                MappedPair mapping = child.toBPMN(builder, beforeGateway);
 
-                if (!bpmnOpbject.equals(beforeGateway)) {
-                    builder.createSequenceFlow(bpmnOpbject, afterGateway);
+                if (!mapping.isEmpty()) {
+                    builder.createSequenceFlow(mapping.getEndNode(), afterGateway);
                 }
             }
         } else {
@@ -49,7 +50,7 @@ public class Flow extends Activity {
             }
 
             for (BPELObject child : children) {
-                FlowNode bpmnOpbject = child.toBPMN(builder, beforeGateway);
+                FlowNode bpmnOpbject = child.toBPMN(builder, beforeGateway).getEndNode();
 
                 for (String source : child.getSources()) {
                     flow = targets.get(source);
@@ -82,7 +83,7 @@ public class Flow extends Activity {
 
         // TODO: Take into account JoinSupressionFail
 
-        return afterGateway;
+        return new MappedPair(beforeGateway, afterGateway);
     }
 
     public void addChild(BPELObject child) {

@@ -3,6 +3,7 @@ package org.bpel2bpmn.models.bpel.activities.structured;
 import org.bpel2bpmn.exceptions.BPELConversionException;
 import org.bpel2bpmn.models.bpel.BPELObject;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.structures.MappedPair;
 import org.camunda.bpm.model.bpmn.instance.*;
 
 public class While extends LoopActivity {
@@ -12,7 +13,7 @@ public class While extends LoopActivity {
     }
 
     @Override
-    public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException {
+    public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException {
         FlowNode subProcess;
 
         ExclusiveGateway afterGateway = builder.createElement(ExclusiveGateway.class);
@@ -24,7 +25,9 @@ public class While extends LoopActivity {
 
             FlowNode lastNode = builder.createElement(StartEvent.class);
             for (BPELObject child : children) {
-                lastNode = child.toBPMN(builder, lastNode);
+                MappedPair mapping = child.toBPMN(builder, lastNode);
+                builder.createSequenceFlow(lastNode, mapping.getStartNode());
+                lastNode = mapping.getEndNode();
             }
 
             FlowNode end = builder.createElement(EndEvent.class);
@@ -32,7 +35,7 @@ public class While extends LoopActivity {
 
             builder.setCurrentScope((BpmnModelElementInstance) subProcess.getParentElement());
         } else {
-            subProcess = children.get(0).toBPMN(builder, beforeGateway);
+            subProcess = children.get(0).toBPMN(builder, beforeGateway).getStartNode();
         }
 
         builder.prepareConditionalSequenceFlow(condition);
@@ -44,6 +47,6 @@ public class While extends LoopActivity {
         builder.prepareConditionalSequenceFlow(condition);
         builder.createSequenceFlow(afterGateway, subProcess);
 
-        return afterGateway;
+        return new MappedPair(beforeGateway, afterGateway);
     }
 }

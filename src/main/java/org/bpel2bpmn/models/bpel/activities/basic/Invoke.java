@@ -2,6 +2,7 @@ package org.bpel2bpmn.models.bpel.activities.basic;
 
 import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.structures.MappedPair;
 import org.bpel2bpmn.utilities.validation.ValidationResult;
 import org.camunda.bpm.model.bpmn.impl.instance.SourceRef;
 import org.camunda.bpm.model.bpmn.impl.instance.TargetRef;
@@ -22,17 +23,19 @@ public class Invoke extends Activity {
     }
 
     @Override
-    public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) {
-        FlowNode lastNode = createSendTask(builder);
+    public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) {
+        SendTask sendTask = createSendTask(builder);
+        MappedPair result = new MappedPair(sendTask);
 
         // Map for synchronous invoke
         if (isSynchronous()) {
-            lastNode = createReceiveTask(builder, (SendTask) lastNode);
+             ReceiveTask receiveTask = createReceiveTask(builder, sendTask);
+             result.setEndNode(receiveTask);
         }
 
         // Note: Fault handlers are not implemented. Implementation should be placed around here.
 
-        return lastNode;
+        return result;
     }
 
     private SendTask createSendTask(BPMNBuilder builder) {

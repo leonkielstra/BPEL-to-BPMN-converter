@@ -2,6 +2,7 @@ package org.bpel2bpmn.models.bpel.activities.basic;
 
 import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.structures.MappedPair;
 import org.bpel2bpmn.utilities.validation.ValidationResult;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.EndEvent;
@@ -23,18 +24,17 @@ public class Throw extends Activity {
     }
 
     @Override
-    public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) {
+    public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) {
         BpmnModelInstance modelInstance = builder.getModelInstance();
 
         Error error = builder.createElement(modelInstance.getDefinitions(), Error.class);
         error.setName(getFaultName());
 
         FlowNode endEvent = builder.createElement(EndEvent.class);
-        ErrorEventDefinition errorEventDef = modelInstance.newInstance(ErrorEventDefinition.class);
+        ErrorEventDefinition errorEventDef = builder.createElement(endEvent, ErrorEventDefinition.class);
         errorEventDef.setError(error);
-        endEvent.addChildElement(errorEventDef);
 
-        return endEvent;
+        return new MappedPair(endEvent);
     }
 
     public ValidationResult validate() {

@@ -3,6 +3,7 @@ package org.bpel2bpmn.models.bpel;
 import org.bpel2bpmn.exceptions.BPELConversionException;
 import org.bpel2bpmn.models.bpel.generic.PartnerLink;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.structures.MappedPair;
 import org.bpel2bpmn.utilities.validation.ValidationResult;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
@@ -53,8 +54,8 @@ public class Process extends BPELObject {
     }
 
     @Override
-    public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) {
-        return from;
+    public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) {
+        return new MappedPair();
     }
 
     public ValidationResult validate() {
@@ -84,7 +85,8 @@ public class Process extends BPELObject {
         // Map and connect children.
         FlowNode lastElement = start;
         for (BPELObject child : children) {
-            lastElement = child.toBPMN(builder, start);
+            MappedPair mapping = child.toBPMN(builder, lastElement);
+            lastElement = mapping.getEndNode();
         }
 
         if (lastElement.getClass() != EndEventImpl.class) {

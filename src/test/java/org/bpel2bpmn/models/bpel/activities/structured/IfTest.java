@@ -42,7 +42,7 @@ public class IfTest {
         ifObject.addElseIfBranch(elseIfBranch);
         ifObject.setElseBranch(elseBranch);
 
-        FlowNode result = ifObject.toBPMN(builder, start);
+        FlowNode result = ifObject.toBPMN(builder, start).getStartNode();
 
         Object[] children = builder.getExecutableProcess().getFlowElements().toArray();
 
