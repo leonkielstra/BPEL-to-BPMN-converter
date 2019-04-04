@@ -25,7 +25,7 @@ public class MappedPair {
     }
 
     public boolean isEmpty() {
-        return (startNode == null && endNode == null);
+        return (startNode == null || endNode == null);
     }
 
     /*

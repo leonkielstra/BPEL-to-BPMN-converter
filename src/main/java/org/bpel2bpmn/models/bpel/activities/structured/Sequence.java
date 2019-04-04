@@ -41,7 +41,7 @@ public class Sequence extends Activity {
             // Set start node of this sequence
             if (isFirstChild) {
                 result.setStartNode(mapping.getStartNode());
-                isFirstChild = false;
+                if (result.getStartNode() != null) isFirstChild = false;
             }
         }
 

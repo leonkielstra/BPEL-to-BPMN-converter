@@ -103,6 +103,7 @@ public class BPELParser {
                 break;
             case Activity.RECEIVE:
                 bpelObject = ReceiveParser.parse(element);
+                parseChildren = false;
                 break;
             case Activity.REPLY:
                 bpelObject = ReplyParser.parse(element);
