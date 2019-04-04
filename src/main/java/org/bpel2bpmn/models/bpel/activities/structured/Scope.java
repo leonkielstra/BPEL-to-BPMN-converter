@@ -29,6 +29,8 @@ public class Scope extends Activity {
         SubProcess subProcess = builder.createElement(SubProcess.class);
         builder.setCurrentScope(subProcess);
 
+        // Note: Partnerlinks are not implemented for a scope.
+
         // Map and connect children.
         FlowNode lastElement = null;
         for (BPELObject child : children) {
@@ -39,7 +41,7 @@ public class Scope extends Activity {
             }
         }
 
-        // Note: Fault handlers aren't mapped for subprocesses
+        // Note: Fault handlers aren't mapped for subprocesses.
 
         builder.setCurrentScope((BpmnModelElementInstance) subProcess.getParentElement());
 

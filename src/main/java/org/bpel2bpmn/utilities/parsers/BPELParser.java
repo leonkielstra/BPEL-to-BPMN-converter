@@ -8,6 +8,7 @@ import org.bpel2bpmn.models.bpel.activities.basic.Assign;
 import org.bpel2bpmn.models.bpel.activities.basic.Empty;
 import org.bpel2bpmn.models.bpel.activities.basic.Exit;
 import org.bpel2bpmn.models.bpel.activities.basic.Rethrow;
+import org.bpel2bpmn.models.bpel.activities.structured.Scope;
 import org.bpel2bpmn.models.bpel.activities.structured.Sequence;
 import org.bpel2bpmn.models.bpel.activities.structured.While;
 import org.bpel2bpmn.utilities.parsers.model.ProcessParser;
@@ -109,6 +110,9 @@ public class BPELParser {
                 break;
             case Activity.RETHROW:
                 bpelObject = BPELObjectParser.parse(element, Rethrow.class);
+                break;
+            case "scope":
+                bpelObject = BPELObjectParser.parse(element, Scope.class);
                 break;
             case Activity.SEQUENCE:
                 bpelObject = BPELObjectParser.parse(element, Sequence.class);
