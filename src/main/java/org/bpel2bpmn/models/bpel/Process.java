@@ -86,7 +86,10 @@ public class Process extends BPELObject {
         FlowNode lastElement = start;
         for (BPELObject child : children) {
             MappedPair mapping = child.toBPMN(builder, lastElement);
-            lastElement = mapping.getEndNode();
+            if (!mapping.isEmpty()) {
+                builder.createSequenceFlow(lastElement, mapping.getStartNode());
+                lastElement = mapping.getEndNode();
+            }
         }
 
         if (lastElement.getClass() != EndEventImpl.class) {
