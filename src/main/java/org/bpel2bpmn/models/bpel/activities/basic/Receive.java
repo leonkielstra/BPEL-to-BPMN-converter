@@ -26,8 +26,7 @@ public class Receive extends Activity {
     @Override
     public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) {
         IntermediateCatchEvent event = builder.createElement(IntermediateCatchEvent.class);
-        MessageEventDefinition message = builder.createElement(event, MessageEventDefinition.class);
-        event.addChildElement(message);
+        builder.createElement(event, MessageEventDefinition.class);
 
         builder.createMessageFlow(event, attributes.get("partnerLink"), true);
 

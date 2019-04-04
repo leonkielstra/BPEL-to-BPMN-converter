@@ -28,7 +28,7 @@ public class Reply extends Activity {
         IntermediateThrowEvent messageEvent = builder.createElement(IntermediateThrowEvent.class);
         builder.createElement(messageEvent, MessageEventDefinition.class);
         builder.createMessageFlow(messageEvent, attributes.get("partnerLink"), false);
-            // Note: operation should be added to the message event, but this would invalidate the BPMN model
+            // Note: operation should be added to the message event, but this will invalidate the BPMN model
 
         return new MappedPair(messageEvent);
     }

@@ -20,5 +20,4 @@ public class Exit extends Activity {
 
         return new MappedPair(endEvent);
     }
-
 }

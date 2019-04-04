@@ -5,10 +5,8 @@ import org.bpel2bpmn.utilities.builders.BPMNBuilder;
 import org.bpel2bpmn.utilities.structures.MappedPair;
 import org.bpel2bpmn.utilities.validation.ValidationResult;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.EndEvent;
+import org.camunda.bpm.model.bpmn.instance.*;
 import org.camunda.bpm.model.bpmn.instance.Error;
-import org.camunda.bpm.model.bpmn.instance.ErrorEventDefinition;
-import org.camunda.bpm.model.bpmn.instance.FlowNode;
 
 public class Throw extends Activity {
 

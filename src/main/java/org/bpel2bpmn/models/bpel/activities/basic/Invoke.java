@@ -41,7 +41,7 @@ public class Invoke extends Activity {
     private SendTask createSendTask(BPMNBuilder builder) {
         // Create send task
         SendTask sendTask = builder.createElement(SendTask.class);
-            // Note: operation should be added to the send task, but this would invalidate the BPMN model
+            // Note: operation should be added to the send task, but this will invalidate the BPMN model
 
         Property property = builder.createElement(sendTask, Property.class);
 
@@ -66,7 +66,7 @@ public class Invoke extends Activity {
 
     private ReceiveTask createReceiveTask(BPMNBuilder builder, SendTask sendTask) {
         ReceiveTask receiveTask = builder.createElement(ReceiveTask.class);
-            // Note: operation should be added to the receive task, but this would invalidate the BPMN model
+            // Note: operation should be added to the receive task, but this will invalidate the BPMN model
 
         Property property = builder.createElement(receiveTask, Property.class);
 
