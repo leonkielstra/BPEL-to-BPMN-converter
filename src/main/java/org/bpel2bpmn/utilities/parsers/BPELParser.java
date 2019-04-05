@@ -8,10 +8,7 @@ import org.bpel2bpmn.models.bpel.activities.basic.Assign;
 import org.bpel2bpmn.models.bpel.activities.basic.Empty;
 import org.bpel2bpmn.models.bpel.activities.basic.Exit;
 import org.bpel2bpmn.models.bpel.activities.basic.Rethrow;
-import org.bpel2bpmn.models.bpel.activities.structured.RepeatUntil;
-import org.bpel2bpmn.models.bpel.activities.structured.Scope;
-import org.bpel2bpmn.models.bpel.activities.structured.Sequence;
-import org.bpel2bpmn.models.bpel.activities.structured.While;
+import org.bpel2bpmn.models.bpel.activities.structured.*;
 import org.bpel2bpmn.utilities.parsers.model.ProcessParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.BPELObjectParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.basic.*;
@@ -81,6 +78,10 @@ public class BPELParser {
                 break;
             case Activity.FLOW:
                 bpelObject = FlowParser.parse(element);
+                parseChildren = false;
+                break;
+            case Activity.FOREACH:
+                bpelObject = BPELObjectParser.parse(element, ForEach.class);
                 parseChildren = false;
                 break;
             case Activity.IF:
