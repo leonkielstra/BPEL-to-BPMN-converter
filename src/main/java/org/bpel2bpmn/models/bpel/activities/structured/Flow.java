@@ -5,10 +5,7 @@ import org.bpel2bpmn.models.bpel.BPELObject;
 import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
 import org.bpel2bpmn.utilities.structures.MappedPair;
-import org.camunda.bpm.model.bpmn.instance.ComplexGateway;
-import org.camunda.bpm.model.bpmn.instance.FlowNode;
-import org.camunda.bpm.model.bpmn.instance.ParallelGateway;
-import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
+import org.camunda.bpm.model.bpmn.instance.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,10 +22,8 @@ public class Flow extends Activity {
 
     @Override
     public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException {
-        ComplexGateway afterGateway = builder.createElement(ComplexGateway.class);
         ParallelGateway beforeGateway = builder.createElement(ParallelGateway.class);
-
-        builder.createSequenceFlow(from, beforeGateway);
+        ComplexGateway afterGateway = builder.createElement(ComplexGateway.class);
 
         // No links
         if (links.size() < 1) {
@@ -80,8 +75,7 @@ public class Flow extends Activity {
             }
         }
 
-
-        // TODO: Take into account JoinSupressionFail
+        // Note: failures and therefore suppressJoinFailure are not implemented
 
         return new MappedPair(beforeGateway, afterGateway);
     }

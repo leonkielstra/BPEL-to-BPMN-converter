@@ -11,7 +11,7 @@ Here is a list of BPEL elements and whether they are implemented or not.
 - [x] Exit
 - [x] Documentation
 - [ ] FaultHandlers
-- [ ] Flow
+- [x] Flow (implemented without failures and suppressJoinFailure since this needs some expression language)
 - [ ] ForEach (not mapped due to lack of mapping for expression languages)
 - [x] If
 - [x] Import
