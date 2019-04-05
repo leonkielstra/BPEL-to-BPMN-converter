@@ -2,6 +2,7 @@ package org.bpel2bpmn.models.bpel.activities.basic;
 
 import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.structures.MappedPair;
 import org.bpel2bpmn.utilities.validation.ValidationResult;
 import org.camunda.bpm.model.bpmn.impl.instance.SourceRef;
 import org.camunda.bpm.model.bpmn.impl.instance.TargetRef;
@@ -22,23 +23,25 @@ public class Invoke extends Activity {
     }
 
     @Override
-    public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) {
-        FlowNode lastNode = createSendTask(builder);
+    public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) {
+        SendTask sendTask = createSendTask(builder);
+        MappedPair result = new MappedPair(sendTask);
 
         // Map for synchronous invoke
         if (isSynchronous()) {
-            lastNode = createReceiveTask(builder, (SendTask) lastNode);
+             ReceiveTask receiveTask = createReceiveTask(builder, sendTask);
+             result.setEndNode(receiveTask);
         }
 
         // Note: Fault handlers are not implemented. Implementation should be placed around here.
 
-        return lastNode;
+        return result;
     }
 
     private SendTask createSendTask(BPMNBuilder builder) {
         // Create send task
         SendTask sendTask = builder.createElement(SendTask.class);
-            // Note: operation should be added to the send task, but this would invalidate the BPMN model
+            // Note: operation should be added to the send task, but this will invalidate the BPMN model
 
         Property property = builder.createElement(sendTask, Property.class);
 
@@ -63,7 +66,7 @@ public class Invoke extends Activity {
 
     private ReceiveTask createReceiveTask(BPMNBuilder builder, SendTask sendTask) {
         ReceiveTask receiveTask = builder.createElement(ReceiveTask.class);
-            // Note: operation should be added to the receive task, but this would invalidate the BPMN model
+            // Note: operation should be added to the receive task, but this will invalidate the BPMN model
 
         Property property = builder.createElement(receiveTask, Property.class);
 

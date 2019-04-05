@@ -3,6 +3,7 @@ package org.bpel2bpmn.models.bpel;
 import org.bpel2bpmn.exceptions.BPELConversionException;
 import org.bpel2bpmn.models.bpel.activities.structured.Scope;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.structures.MappedPair;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.jdom.Document;
 import org.slf4j.Logger;
@@ -70,7 +71,7 @@ public abstract class BPELObject {
      * @param from the BPMN element to which the newly mapped element should be connected
      * @return a BPMN element
      */
-    public abstract FlowNode toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException;
+    public abstract MappedPair toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException;
 
     /*
      * Getters & Setters

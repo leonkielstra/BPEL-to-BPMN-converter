@@ -11,18 +11,18 @@ Here is a list of BPEL elements and whether they are implemented or not.
 - [x] Exit
 - [x] Documentation
 - [ ] FaultHandlers
-- [ ] Flow
-- [ ] ForEach
+- [x] Flow (implemented without failures and suppressJoinFailure since this needs some expression language)
+- [ ] ForEach (not mapped due to lack of mapping for expression languages)
 - [x] If
 - [x] Import
 - [x] Invoke (implemented without operation reference and fault handlers)
 - [x] PartnerLink (implemented without WSDL interfaces + messages)
-- [ ] Pick
+- [x] Pick (added intermediate catch event at the end to connect the next activity)
 - [x] Receive
 - [x] RepeatUntil (this needs a mapping for expression languages)
 - [x] Reply (implemented without operation reference)
 - [x] Rethrow
-- [ ] Scope
+- [ ] Scope (only implemented simple encapsulation of child proccesses are mapped, no sub process logic)
 - [x] Sequence
 - [x] Throw
 - [ ] Variables (this isn't fully mappable)

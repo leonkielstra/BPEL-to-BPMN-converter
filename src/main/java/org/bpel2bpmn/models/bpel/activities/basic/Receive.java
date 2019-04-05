@@ -1,9 +1,10 @@
 package org.bpel2bpmn.models.bpel.activities.basic;
 
+import org.bpel2bpmn.exceptions.BPELConversionException;
 import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.structures.MappedPair;
 import org.bpel2bpmn.utilities.validation.ValidationResult;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.camunda.bpm.model.bpmn.instance.IntermediateCatchEvent;
 import org.camunda.bpm.model.bpmn.instance.MessageEventDefinition;
@@ -24,12 +25,15 @@ public class Receive extends Activity {
     }
 
     @Override
-    public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) {
-        BpmnModelInstance modelInstance = builder.getModelInstance();
+    public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException {
+        IntermediateCatchEvent event = createMessageEvent(builder);
 
+        return new MappedPair(event);
+    }
+
+    protected IntermediateCatchEvent createMessageEvent(BPMNBuilder builder) {
         IntermediateCatchEvent event = builder.createElement(IntermediateCatchEvent.class);
-        MessageEventDefinition message = modelInstance.newInstance(MessageEventDefinition.class);
-        event.addChildElement(message);
+        builder.createElement(event, MessageEventDefinition.class);
 
         builder.createMessageFlow(event, attributes.get("partnerLink"), true);
 

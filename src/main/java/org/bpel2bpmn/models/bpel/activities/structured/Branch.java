@@ -4,6 +4,7 @@ import org.bpel2bpmn.exceptions.BPELConversionException;
 import org.bpel2bpmn.models.bpel.BPELObject;
 import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.structures.MappedPair;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 
 import java.util.ArrayList;
@@ -23,19 +24,29 @@ public class Branch extends Activity {
     }
 
     @Override
-    public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException {
-        FlowNode lastElement = from;
-        FlowNode currentElement;
+    public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException {
+        MappedPair result = new MappedPair();
+        FlowNode lastElement = null;
 
+        boolean isFirstChild = true;
         for (BPELObject child : children) {
             builder.prepareConditionalSequenceFlow(condition);
 
-            currentElement = child.toBPMN(builder, lastElement);
-            builder.createSequenceFlow(lastElement, currentElement);
-            lastElement = currentElement;
+            MappedPair mapping = child.toBPMN(builder, lastElement);
+            if (!mapping.isEmpty()) {
+                builder.createSequenceFlow(lastElement, mapping.getStartNode());
+                lastElement = mapping.getEndNode();
+            }
+
+            if (isFirstChild && !mapping.isEmpty()) {
+                result.setStartNode(mapping.getStartNode());
+                isFirstChild = false;
+            }
         }
 
-        return lastElement;
+        result.setEndNode(lastElement);
+
+        return result;
     }
 
     /*

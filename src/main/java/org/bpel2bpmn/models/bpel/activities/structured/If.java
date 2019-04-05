@@ -3,6 +3,7 @@ package org.bpel2bpmn.models.bpel.activities.structured;
 import org.bpel2bpmn.exceptions.BPELConversionException;
 import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.structures.MappedPair;
 import org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl;
 import org.camunda.bpm.model.bpmn.instance.ExclusiveGateway;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
@@ -22,30 +23,29 @@ public class If extends Activity {
     }
 
     @Override
-    public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException {
+    public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException {
         // Gateway to diverge incoming branch
         ExclusiveGateway divergeGateway = builder.createElement(ExclusiveGateway.class);
-        builder.createSequenceFlow(from, divergeGateway);
 
         // Gateway to join branches
         ExclusiveGateway joinGateway = builder.createElement(ExclusiveGateway.class);
 
         // Map branches
-        FlowNode node = ifBranch.toBPMN(builder, divergeGateway);
-        mapSequenceFlow(builder, node, joinGateway);
+        FlowNode node = ifBranch.toBPMN(builder, divergeGateway).getEndNode();
+        if (node != null) mapSequenceFlow(builder, node, joinGateway);
 
         for (Branch elseIfBranch : elseIfBranches) {
-            node = elseIfBranch.toBPMN(builder, divergeGateway);
-            mapSequenceFlow(builder, node, joinGateway);
+            node = elseIfBranch.toBPMN(builder, divergeGateway).getEndNode();
+            if (node != null) mapSequenceFlow(builder, node, joinGateway);
         }
 
         if (elseBranch != null) {
-            node = elseBranch.toBPMN(builder, divergeGateway);
-            mapSequenceFlow(builder, node, joinGateway);
+            node = elseBranch.toBPMN(builder, divergeGateway).getEndNode();
+            if (node != null) mapSequenceFlow(builder, node, joinGateway);
             // The mapping describes a 'default' sequence flow. This is purely for notation purposes and will be ignored.
         }
 
-        return joinGateway;
+        return new MappedPair(divergeGateway, joinGateway);
     }
 
     private void mapSequenceFlow(BPMNBuilder builder, FlowNode from, FlowNode to) {

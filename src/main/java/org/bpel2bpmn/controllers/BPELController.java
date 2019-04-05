@@ -62,6 +62,11 @@ public class BPELController {
 
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                     .body(buildErrorXML("This BPEL file cannot be converted; " + e.getMessage()));
+        } catch (Exception e) {
+            LOG.error("Unexpected exception; " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(buildErrorXML("Something went wrong server side."));
         }
     }
 

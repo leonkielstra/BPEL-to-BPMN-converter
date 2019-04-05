@@ -8,8 +8,7 @@ import org.bpel2bpmn.models.bpel.activities.basic.Assign;
 import org.bpel2bpmn.models.bpel.activities.basic.Empty;
 import org.bpel2bpmn.models.bpel.activities.basic.Exit;
 import org.bpel2bpmn.models.bpel.activities.basic.Rethrow;
-import org.bpel2bpmn.models.bpel.activities.structured.Sequence;
-import org.bpel2bpmn.models.bpel.activities.structured.While;
+import org.bpel2bpmn.models.bpel.activities.structured.*;
 import org.bpel2bpmn.utilities.parsers.model.ProcessParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.BPELObjectParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.basic.*;
@@ -63,7 +62,7 @@ public class BPELParser {
         org.bpel2bpmn.models.bpel.BPELObject bpelObject;
 
         boolean parseChildren = true; // If false, children are parsed within element parser.
-        switch (element.getName().toLowerCase()) {
+        switch (element.getName()) {
             case "documentation":
                 bpelObject = DocumentationParser.parse(element);
                 parseChildren = false;
@@ -79,6 +78,10 @@ public class BPELParser {
                 break;
             case Activity.FLOW:
                 bpelObject = FlowParser.parse(element);
+                parseChildren = false;
+                break;
+            case Activity.FOREACH:
+                bpelObject = BPELObjectParser.parse(element, ForEach.class);
                 parseChildren = false;
                 break;
             case Activity.IF:
@@ -102,6 +105,11 @@ public class BPELParser {
                 break;
             case Activity.RECEIVE:
                 bpelObject = ReceiveParser.parse(element);
+                parseChildren = false;
+                break;
+            case Activity.REPEATUNTIL:
+                bpelObject = LoopParser.parse(element, RepeatUntil.class);
+                parseChildren = false;
                 break;
             case Activity.REPLY:
                 bpelObject = ReplyParser.parse(element);
@@ -109,6 +117,9 @@ public class BPELParser {
                 break;
             case Activity.RETHROW:
                 bpelObject = BPELObjectParser.parse(element, Rethrow.class);
+                break;
+            case "scope":
+                bpelObject = BPELObjectParser.parse(element, Scope.class);
                 break;
             case Activity.SEQUENCE:
                 bpelObject = BPELObjectParser.parse(element, Sequence.class);

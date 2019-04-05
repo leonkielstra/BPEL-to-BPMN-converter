@@ -2,11 +2,13 @@ package org.bpel2bpmn.models.bpel.activities.basic;
 
 import factories.BPMNBuilderFactory;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.structures.MappedPair;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
 import org.junit.Before;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 public class EmptyTest {
@@ -23,9 +25,9 @@ public class EmptyTest {
     @Test
     public void toBPMN() {
         FlowNode start = builder.createElement(StartEvent.class);
-        FlowNode bpmn = empty.toBPMN(builder, start);
+        MappedPair bpmn = empty.toBPMN(builder, start);
 
-        assertEquals(start, bpmn);
+        assertTrue(bpmn.isEmpty());
     }
 
 }

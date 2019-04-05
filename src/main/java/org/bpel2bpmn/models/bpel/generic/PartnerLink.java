@@ -2,6 +2,7 @@ package org.bpel2bpmn.models.bpel.generic;
 
 import org.bpel2bpmn.models.bpel.BPELObject;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
+import org.bpel2bpmn.utilities.structures.MappedPair;
 import org.bpel2bpmn.utilities.validation.ValidationResult;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.camunda.bpm.model.bpmn.instance.Participant;
@@ -52,8 +53,8 @@ public class PartnerLink extends BPELObject {
     }
 
     @Override
-    public FlowNode toBPMN(BPMNBuilder builder, FlowNode from) {
-        return from;
+    public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) {
+        return new MappedPair();
     }
 
     /*

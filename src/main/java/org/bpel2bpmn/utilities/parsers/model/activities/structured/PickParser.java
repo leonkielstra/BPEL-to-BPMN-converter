@@ -7,6 +7,8 @@ import org.bpel2bpmn.models.bpel.activities.structured.OnMessage;
 import org.bpel2bpmn.models.bpel.activities.structured.Pick;
 import org.bpel2bpmn.utilities.parsers.BPELParser;
 import org.bpel2bpmn.utilities.parsers.model.activities.basic.WaitParser;
+import org.bpel2bpmn.utilities.validation.ValidationResult;
+import org.jdom.Attribute;
 import org.jdom.Element;
 
 public class PickParser {
@@ -38,7 +40,19 @@ public class PickParser {
     private static OnMessage parseOnMessage(Element element) throws BPELParseException {
         OnMessage event = new OnMessage();
 
-        // TODO: Implement message event (probably Receive).
+        // Parse onMessage attributes
+        for (String attributeName : OnMessage.ATTRIBUTES) {
+            Attribute attribute = element.getAttribute(attributeName);
+            if (attribute != null) {
+                event.addAttribute(attributeName, attribute.getValue());
+            }
+        }
+
+        // Validate onMessage event
+        ValidationResult validationResult = event.validate();
+        if (!validationResult.isValid()) {
+            throw new BPELParseException(validationResult.getMessage());
+        }
 
         BPELParser.parseChildren(event, element);
 

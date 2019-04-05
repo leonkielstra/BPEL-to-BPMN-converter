@@ -36,9 +36,6 @@ public abstract class Activity extends BPELObject {
             "suppressJoinFailure"
     };
 
-    /* The standard elements for an activity */
-    // TODO: Implement standard elements.
-
     public Activity() {
         addAttribute("suppressJoinFailure", "no");
     }

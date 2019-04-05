@@ -26,7 +26,7 @@ public class DocumentationTest {
     public void toBPMN() {
         FlowNode start = builder.createElement(StartEvent.class);
 
-        FlowNode last = documentation.toBPMN(builder, start);
+        FlowNode last = documentation.toBPMN(builder, start).getStartNode();
 
         Process process = builder.getExecutableProcess();
         Object[] children = process.getChildElementsByType(org.camunda.bpm.model.bpmn.instance.Documentation.class).toArray();
