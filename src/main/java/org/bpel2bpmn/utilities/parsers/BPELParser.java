@@ -137,7 +137,8 @@ public class BPELParser {
                 parseChildren = false;
                 break;
             default:
-                return null; // TODO: action if not recognized.
+                LOG.debug("Element not recognised.");
+                return null;
         }
 
         if (parseChildren) { parseChildren(bpelObject, element); }
