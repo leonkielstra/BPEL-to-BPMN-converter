@@ -44,7 +44,7 @@ public class FlowParser {
                     String name = child.getAttributeValue("name");
 
                     if (name != null) {
-                        flow.addLink(child.getAttributeValue("name"));
+                        flow.addLink(name);
                     } else {
                         throw new BPELParseException("Link object should contain a 'name' attribute.");
                     }

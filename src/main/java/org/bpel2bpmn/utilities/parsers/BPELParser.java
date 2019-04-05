@@ -8,6 +8,7 @@ import org.bpel2bpmn.models.bpel.activities.basic.Assign;
 import org.bpel2bpmn.models.bpel.activities.basic.Empty;
 import org.bpel2bpmn.models.bpel.activities.basic.Exit;
 import org.bpel2bpmn.models.bpel.activities.basic.Rethrow;
+import org.bpel2bpmn.models.bpel.activities.structured.RepeatUntil;
 import org.bpel2bpmn.models.bpel.activities.structured.Scope;
 import org.bpel2bpmn.models.bpel.activities.structured.Sequence;
 import org.bpel2bpmn.models.bpel.activities.structured.While;
@@ -64,7 +65,7 @@ public class BPELParser {
         org.bpel2bpmn.models.bpel.BPELObject bpelObject;
 
         boolean parseChildren = true; // If false, children are parsed within element parser.
-        switch (element.getName().toLowerCase()) {
+        switch (element.getName()) {
             case "documentation":
                 bpelObject = DocumentationParser.parse(element);
                 parseChildren = false;
@@ -103,6 +104,10 @@ public class BPELParser {
                 break;
             case Activity.RECEIVE:
                 bpelObject = ReceiveParser.parse(element);
+                parseChildren = false;
+                break;
+            case Activity.REPEATUNTIL:
+                bpelObject = LoopParser.parse(element, RepeatUntil.class);
                 parseChildren = false;
                 break;
             case Activity.REPLY:

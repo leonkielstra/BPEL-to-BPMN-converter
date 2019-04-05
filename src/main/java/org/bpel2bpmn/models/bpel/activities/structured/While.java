@@ -44,6 +44,7 @@ public class While extends LoopActivity {
 
         builder.createSequenceFlow(subProcess, afterGateway);
 
+        // Add check to validate if it as to run again.
         builder.prepareConditionalSequenceFlow(condition);
         builder.createSequenceFlow(afterGateway, subProcess);
 
