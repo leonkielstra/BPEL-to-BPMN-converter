@@ -14,30 +14,30 @@ public class While extends LoopActivity {
 
     @Override
     public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException {
-        FlowNode subProcess;
-
+        /*
+         * The Camunda BPMN API does not include a loop characteristic,
+         * therefore the loop is implemented with gateways where the condition is checked.
+         */
         ExclusiveGateway afterGateway = builder.createElement(ExclusiveGateway.class);
         ExclusiveGateway beforeGateway = builder.createElement(ExclusiveGateway.class);
 
-        if (children.size() != 1 || !(children.get(0) instanceof Scope)) {
-            subProcess = builder.createElement(SubProcess.class);
-            builder.setCurrentScope(subProcess);
+        // Note: In this implementation a loop is always wrapped inside a subprocess
+        SubProcess subProcess = builder.createElement(SubProcess.class);
+        builder.setCurrentScope(subProcess);
 
-            FlowNode lastNode = builder.createElement(StartEvent.class);
-            for (BPELObject child : children) {
-                MappedPair mapping = child.toBPMN(builder, lastNode);
-                builder.createSequenceFlow(lastNode, mapping.getStartNode());
-                lastNode = mapping.getEndNode();
-            }
-
-            FlowNode end = builder.createElement(EndEvent.class);
-            builder.createSequenceFlow(lastNode, end);
-
-            builder.setCurrentScope((BpmnModelElementInstance) subProcess.getParentElement());
-        } else {
-            subProcess = children.get(0).toBPMN(builder, beforeGateway).getStartNode();
+        FlowNode lastNode = builder.createElement(StartEvent.class);
+        for (BPELObject child : children) {
+            MappedPair mapping = child.toBPMN(builder, lastNode);
+            builder.createSequenceFlow(lastNode, mapping.getStartNode());
+            lastNode = mapping.getEndNode();
         }
 
+        FlowNode end = builder.createElement(EndEvent.class);
+        builder.createSequenceFlow(lastNode, end);
+
+        builder.setCurrentScope((BpmnModelElementInstance) subProcess.getParentElement());
+
+        // To check the condition beforehand.
         builder.prepareConditionalSequenceFlow(condition);
         builder.createSequenceFlow(beforeGateway, subProcess);
         builder.createSequenceFlow(beforeGateway, afterGateway);
