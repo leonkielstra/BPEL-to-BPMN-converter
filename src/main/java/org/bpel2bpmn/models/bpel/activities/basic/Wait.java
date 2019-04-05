@@ -1,5 +1,6 @@
 package org.bpel2bpmn.models.bpel.activities.basic;
 
+import org.bpel2bpmn.exceptions.BPELConversionException;
 import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
 import org.bpel2bpmn.utilities.structures.MappedPair;
@@ -7,8 +8,8 @@ import org.camunda.bpm.model.bpmn.instance.*;
 
 public class Wait extends Activity {
 
-    private boolean isTimer; /* true in case of a <for> construct, false in case of a <until> construct. */
-    private String timeExpression; /* Represents either the duration or deadline expression */
+    protected boolean isTimer; /* true in case of a <for> construct, false in case of a <until> construct. */
+    protected String timeExpression; /* Represents either the duration or deadline expression */
 
     public Wait() {
         super();
@@ -17,7 +18,13 @@ public class Wait extends Activity {
     }
 
     @Override
-    public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) {
+    public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException {
+        IntermediateCatchEvent intermediateEvent = createTimerEvent(builder);
+
+        return new MappedPair(intermediateEvent);
+    }
+
+    protected IntermediateCatchEvent createTimerEvent(BPMNBuilder builder) {
         IntermediateCatchEvent intermediateEvent = builder.createElement(IntermediateCatchEvent.class);
         TimerEventDefinition timer = builder.createElement(intermediateEvent, TimerEventDefinition.class);
 
@@ -29,7 +36,7 @@ public class Wait extends Activity {
             timeDate.setTextContent(timeExpression);
         }
 
-        return new MappedPair(intermediateEvent);
+        return intermediateEvent;
     }
 
     /*

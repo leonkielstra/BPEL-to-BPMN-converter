@@ -1,5 +1,6 @@
 package org.bpel2bpmn.models.bpel.activities.basic;
 
+import org.bpel2bpmn.exceptions.BPELConversionException;
 import org.bpel2bpmn.models.bpel.activities.Activity;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
 import org.bpel2bpmn.utilities.structures.MappedPair;
@@ -24,13 +25,19 @@ public class Receive extends Activity {
     }
 
     @Override
-    public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) {
+    public MappedPair toBPMN(BPMNBuilder builder, FlowNode from) throws BPELConversionException {
+        IntermediateCatchEvent event = createMessageEvent(builder);
+
+        return new MappedPair(event);
+    }
+
+    protected IntermediateCatchEvent createMessageEvent(BPMNBuilder builder) {
         IntermediateCatchEvent event = builder.createElement(IntermediateCatchEvent.class);
         builder.createElement(event, MessageEventDefinition.class);
 
         builder.createMessageFlow(event, attributes.get("partnerLink"), true);
 
-        return new MappedPair(event);
+        return event;
     }
 
     public ValidationResult validate() {
