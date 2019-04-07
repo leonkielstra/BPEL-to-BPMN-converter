@@ -1,5 +1,6 @@
 package org.bpel2bpmn.utilities.parsers.model;
 
+import org.bpel2bpmn.exceptions.BPELParseException;
 import org.bpel2bpmn.models.bpel.Process;
 import org.bpel2bpmn.models.bpel.generic.PartnerLink;
 import org.bpel2bpmn.utilities.parsers.model.generic.PartnerLinksParser;
@@ -16,7 +17,7 @@ public class ProcessParser {
 
     private static Logger LOG = LoggerFactory.getLogger(ProcessParser.class);
 
-    public static Process parse(Element element) throws IllegalStateException {
+    public static Process parse(Element element) throws BPELParseException {
         Process process = new Process();
         parseAttributes(process, element);
         parsePartnerLinks(process, element);
@@ -24,7 +25,7 @@ public class ProcessParser {
         return process;
     }
 
-    private static void parseAttributes(Process process, Element element) throws IllegalStateException {
+    private static void parseAttributes(Process process, Element element) throws BPELParseException {
         for (String attributeName : Process.ATTRIBUTES) {
             Attribute attribute = element.getAttribute(attributeName);
             if (attribute != null) {
@@ -42,11 +43,11 @@ public class ProcessParser {
 
         ValidationResult validationResult = process.validate();
         if (!validationResult.isValid()) {
-            throw new IllegalStateException(validationResult.getMessage());
+            throw new BPELParseException(validationResult.getMessage());
         }
     }
 
-    private static void parsePartnerLinks(Process process, Element element)  throws IllegalStateException {
+    private static void parsePartnerLinks(Process process, Element element)  throws BPELParseException {
         Element partnerLinksElement = null;
         for (Object child : element.getChildren()) {
             partnerLinksElement = (Element) child;

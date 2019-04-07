@@ -31,7 +31,7 @@ public class LoopParser {
                 loopInstance.setExpressionLanguage(loopInstance.getParentExpressionLanguage());
             }
         } else {
-            throw new IllegalStateException("Expected a condition for this while loop.");
+            throw new BPELParseException("Expected a condition for this while loop.");
         }
 
         BPELParser.parseChildren(loopInstance, element);

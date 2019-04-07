@@ -1,5 +1,6 @@
 package org.bpel2bpmn.utilities.parsers.model.generic;
 
+import org.bpel2bpmn.exceptions.BPELParseException;
 import org.bpel2bpmn.models.bpel.generic.PartnerLink;
 import org.bpel2bpmn.utilities.validation.ValidationResult;
 import org.jdom.Attribute;
@@ -9,7 +10,7 @@ import java.util.HashMap;
 
 public class PartnerLinksParser {
 
-    public static HashMap<String, PartnerLink> parse(Element element) throws IllegalStateException {
+    public static HashMap<String, PartnerLink> parse(Element element) throws BPELParseException {
         HashMap<String, PartnerLink> partnerLinks = new HashMap<>();
 
         for (Object child : element.getChildren()) {
@@ -25,13 +26,13 @@ public class PartnerLinksParser {
         return partnerLinks;
     }
 
-    private static PartnerLink parsePartnerLink(Element element) throws IllegalStateException {
+    private static PartnerLink parsePartnerLink(Element element) throws BPELParseException {
         PartnerLink partnerLink = new PartnerLink();
         parseAttributes(partnerLink, element);
 
         ValidationResult validationResult = partnerLink.validate();
         if (!validationResult.isValid()) {
-            throw new IllegalStateException(validationResult.getMessage());
+            throw new BPELParseException(validationResult.getMessage());
         }
 
         return partnerLink;
