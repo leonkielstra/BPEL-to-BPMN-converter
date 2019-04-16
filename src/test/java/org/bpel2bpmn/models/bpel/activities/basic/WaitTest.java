@@ -1,6 +1,7 @@
 package org.bpel2bpmn.models.bpel.activities.basic;
 
 import factories.BPMNBuilderFactory;
+import org.bpel2bpmn.exceptions.BPELConversionException;
 import org.bpel2bpmn.utilities.builders.BPMNBuilder;
 import org.bpel2bpmn.utilities.structures.MappedPair;
 import org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl;
@@ -27,22 +28,22 @@ public class WaitTest {
     }
 
     @Test
-    public void toBPMNDuration() {
+    public void toBPMNDuration() throws BPELConversionException {
         String timeExpression = "P5Y2M10D";
         wait.setTimer(true);
         wait.setTimeExpression(timeExpression);
 
         MappedPair bpmn = wait.toBPMN(builder, start);
         TimerEventDefinitionImpl timer = (TimerEventDefinitionImpl) bpmn.getStartNode()
-                                                                        .getChildElementsByType(TimerEventDefinition.class)
-                                                                        .toArray()[0];
+                .getChildElementsByType(TimerEventDefinition.class)
+                .toArray()[0];
 
         assertEquals(IntermediateCatchEventImpl.class, bpmn.getStartNode().getClass());
         assertEquals(timeExpression, timer.getTimeDuration().getTextContent());
     }
 
     @Test
-    public void toBPMNDate() {
+    public void toBPMNDate() throws  BPELConversionException {
         String timeExpression = "2002-12-24T18:00+01:00";
         wait.setTimer(false);
         wait.setTimeExpression(timeExpression);
